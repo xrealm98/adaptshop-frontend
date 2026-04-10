@@ -1,0 +1,34 @@
+<div class="max-w-md mx-auto mt-10 p-18 bg-white rounded-lg shadow-md border border-black-400">
+  <h2 class="text-xl font-bold text-heading mb-4">Iniciar sesión</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 my-6">
+    <div>
+      <label for="email" class="form_label">Correo electrónico</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form_input"
+        placeholder=""
+        required
+      />
+      @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+        <span class="form_error">Email no válido</span>
+      }
+    </div>
+    <div>
+      <label for="password" class="form_label">Contraseña</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form_input"
+        placeholder=""
+        required
+      />
+    </div>
+    @if (errorMessage) {
+      <span class="form_error">{{ errorMessage }}</span>
+    }
+    <button type="submit" [disabled]="loginForm.invalid" class="form_button">Iniciar sesión</button>
+  </form>
+</div>
