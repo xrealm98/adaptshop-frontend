@@ -20,12 +20,135 @@
     </div>
     <div>
       @if (authService.isAuthenticated()) {
-        <button
-          (click)="logout()"
-          class="text-sm font-semibold text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg transition cursor-pointer"
-        >
-          Cerrar sesión
-        </button>
+        <div class="relative inline-block text-left">
+          <button
+            (click)="toggleMenu()"
+            class="inline-flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none transition-colors"
+            type="button"
+          >
+            <span>Perfil</span>
+            <svg
+              class="w-4 h-4 ms-2 transition-transform"
+              [class.rotate-180]="isMenuOpen()"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 9-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          @if (isMenuOpen()) {
+            <div
+              class="absolute right-0 z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg w-72 divide-y divide-gray-100"
+            >
+              <div class="p-4">
+                <div class="flex items-center space-x-3 bg-gray-50 p-2 rounded-lg">
+                  <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-sm truncate">
+                    <div class="font-bold text-gray-900">{{ authService.user()?.first_name }}</div>
+                    <div class="text-gray-500">{{ authService.user()?.email }}</div>
+                  </div>
+                  @if (authService.isAdmin()) {
+                    <span
+                      class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded ml-auto"
+                      >ADMIN</span
+                    >
+                  }
+                </div>
+              </div>
+
+              <ul class="p-2 text-sm text-gray-700 font-medium list-none">
+                <li>
+                  <a
+                    routerLink="/perfil"
+                    (click)="isMenuOpen.set(false)"
+                    class="flex items-center p-2 hover:bg-gray-100 rounded"
+                  >
+                    <svg
+                      class="w-4 h-4 me-2 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                    </svg>
+                    Mi Cuenta
+                  </a>
+                </li>
+                <li>
+                  <a
+                    routerLink="/pedidos"
+                    (click)="isMenuOpen.set(false)"
+                    class="flex items-center p-2 hover:bg-gray-100 rounded"
+                  >
+                    <svg
+                      class="w-4 h-4 me-2 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
+                      />
+                    </svg>
+                    Mis Pedidos
+                  </a>
+                </li>
+                @if (authService.isAdmin()) {
+                  <li class="mt-1">
+                    <a
+                      routerLink="/admin"
+                      (click)="isMenuOpen.set(false)"
+                      class="flex items-center p-2 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded font-bold"
+                    >
+                      <svg
+                        class="w-4 h-4 me-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-width="2"
+                          d="M12 6V4m0 2a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m-6 8a2 2 0 1 0 0-4m0 4a2 2 0 1 1 0-4m0 4H4m6-2h10m-6 2a2 2 0 1 0 0-4m0 4a2 2 0 1 1 0-4m0 4h4m-10-2h-2"
+                        />
+                      </svg>
+                      Administración
+                    </a>
+                  </li>
+                }
+              </ul>
+
+              <div class="p-2">
+                <button
+                  (click)="logout(); isMenuOpen.set(false)"
+                  class="flex items-center w-full p-2 text-red-600 hover:bg-red-50 rounded text-sm font-medium transition-colors cursor-pointer"
+                >
+                  <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-width="2"
+                      d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+                    />
+                  </svg>
+                  Cerrar sesión
+                </button>
+              </div>
+            </div>
+          }
+        </div>
       } @else {
         <button
           routerLink="/login"

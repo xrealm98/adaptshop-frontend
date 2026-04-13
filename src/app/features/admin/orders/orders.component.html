@@ -1,0 +1,64 @@
+<app-table-header placeholder="Buscar pedido por ID o cliente..." (onSearch)="onSearch($event)" />
+
+<div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+  <table class="table">
+    <thead class="table__thead">
+      <tr>
+        <th class="table__th">ID</th>
+        <th class="table__th">Cliente</th>
+        <th class="table__th">Fecha</th>
+        <th class="table__th">Total</th>
+        <th class="table__th">Estado</th>
+        <th class="table__th table__th--center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of filteredOrders(); track order.id) {
+        <tr class="bg-white border-b border-gray-200 hover:bg-blue-50 transition-colors">
+          <td class="px-6 py-4 border-r border-gray-200 font-mono text-sm text-gray-600">
+            #{{ order.id }}
+          </td>
+          <td class="table__td">
+            <div class="font-semibold text-gray-900">
+              {{ order.user?.first_name }} {{ order.user?.last_name }}
+            </div>
+            <div class="text-xs text-gray-400">{{ order.shipping_city }}</div>
+          </td>
+          <td class="table__td text-gray-600">
+            {{ order.created_at }}
+          </td>
+          <td class="table__td font-bold text-gray-900">{{ order.total }}€</td>
+          <td class="table__td"></td>
+          <td class="px-6 py-4 flex justify-center gap-3">
+            <button
+              [routerLink]="['/admin/orders', order.id]"
+              class="table__button--edit"
+              title="Editar pedido"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                />
+              </svg>
+            </button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="text-center py-10 text-gray-400 bg-gray-50">
+            No se encontraron pedidos.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,119 @@
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <button (click)="goBack()" class="text-gray-500 hover:text-gray-700 cursor-pointer transition">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+    <h2 class="text-xl font-semibold text-gray-800">
+      {{ isEditMode ? 'Editar producto' : 'Nuevo producto' }}
+    </h2>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="form_label">Nombre</label>
+          <input
+            formControlName="name"
+            type="text"
+            class="form_input"
+            placeholder="Nombre del producto"
+          />
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <span class="form_error">El nombre es obligatorio</span>
+          }
+        </div>
+
+        <div class="col-span-2">
+          <label class="form_label">Descripción</label>
+          <textarea
+            formControlName="description"
+            class="form_input"
+            rows="3"
+            placeholder="Descripción del producto"
+          ></textarea>
+          @if (form.get('description')?.invalid && form.get('description')?.touched) {
+            <span class="form_error">La descripción es obligatoria</span>
+          }
+        </div>
+
+        <div>
+          <label class="form_label">Categoría</label>
+          <select formControlName="category_id" class="form_input">
+            <option value="0" disabled>Selecciona una categoría</option>
+            @for (category of categories(); track category.id) {
+              <option [value]="category.id">{{ category.name }}</option>
+            }
+          </select>
+          @if (form.get('category_id')?.invalid && form.get('category_id')?.touched) {
+            <span class="form_error">Selecciona una categoría</span>
+          }
+        </div>
+
+        <div>
+          <label class="form_label">Precio (€)</label>
+          <input
+            formControlName="price"
+            type="number"
+            min="0"
+            step="0.01"
+            class="form_input"
+            placeholder="0.00"
+          />
+          @if (form.get('price')?.invalid && form.get('price')?.touched) {
+            <span class="form_error">El precio es obligatorio y debe ser mayor o igual a 0</span>
+          }
+        </div>
+
+        <div>
+          <label class="form_label">Stock</label>
+          <input formControlName="stock" type="number" min="0" class="form_input" placeholder="0" />
+          @if (form.get('stock')?.invalid && form.get('stock')?.touched) {
+            <span class="form_error">El stock es obligatorio y debe ser mayor o igual a 0</span>
+          }
+        </div>
+
+        <div>
+          <label class="form_label">URL imagen</label>
+          <input formControlName="image" type="text" class="form_input" placeholder="https://..." />
+        </div>
+
+        <div class="col-span-2 flex items-center gap-3">
+          <input
+            formControlName="is_active"
+            type="checkbox"
+            id="is_active"
+            class="w-4 h-4 text-blue-600 rounded border-gray-300 cursor-pointer"
+          />
+          <label for="is_active" class="form_label mb-0 cursor-pointer">Producto activo</label>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-2">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition cursor-pointer"
+        >
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="form.invalid" class="form_button w-auto">
+          {{ isEditMode ? 'Guardar cambios' : 'Crear producto' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,21 +1,94 @@
 import { Routes } from '@angular/router';
-//import { authGuard } from './core/guards/auth-guard';
-//import { adminGuard } from './core/guards/admin-guard';
+import { adminGuard } from './core/guards/admin-guard';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
+    loadComponent: () =>
+      import('./shared/components/shop-layout/shop-layout').then((m) => m.ShopLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
+      },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+      },
+      {
+        path: 'register',
+        loadComponent: () =>
+          import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+      },
+    ],
   },
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
-  },
-  {
-    path: 'register',
-    loadComponent: () =>
-      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+    path: 'admin',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./features/admin/admin.component').then((m) => m.AdminComponent),
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/admin/dashboard/dashboard.component').then(
+            (m) => m.DashboardComponent,
+          ),
+      },
+      {
+        path: 'products',
+        loadComponent: () =>
+          import('./features/admin/products/products.component').then((m) => m.ProductsComponent),
+      },
+      {
+        path: 'products/create',
+        loadComponent: () =>
+          import('./features/admin/products/product/product-form').then((m) => m.ProductForm),
+      },
+      {
+        path: 'products/edit/:id',
+        loadComponent: () =>
+          import('./features/admin/products/product/product-form').then((m) => m.ProductForm),
+      },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./features/admin/categories/categories.component').then(
+            (m) => m.CategoriesComponent,
+          ),
+      },
+      {
+        path: 'categories/create',
+        loadComponent: () =>
+          import('./features/admin/categories/category/category-form').then((m) => m.CategoryForm),
+      },
+      {
+        path: 'categories/edit/:id',
+        loadComponent: () =>
+          import('./features/admin/categories/category/category-form').then((m) => m.CategoryForm),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/admin/orders/orders.component').then((m) => m.OrdersComponent),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/admin/users/users.component').then((m) => m.UsersComponent),
+      },
+      {
+        path: 'users/edit/:id',
+        loadComponent: () =>
+          import('./features/admin/users/user/user-form').then((m) => m.UserForm),
+      },
+    ],
   },
   {
     path: '**',

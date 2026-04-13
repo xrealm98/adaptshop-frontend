@@ -18,6 +18,9 @@ body {
     @apply hover:text-gray-400 cursor-pointer transition;
   }
 
+  .form {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+  }
   .form_label {
     @apply block mb-2 text-sm font-medium;
   }
@@ -28,7 +31,41 @@ body {
   .form_error {
     @apply text-xs text-red-500;
   }
+
   .form_button {
-    @apply w-full text-white bg-blue-600 disabled:bg-gray-400 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2.5 transition-colors mt-2 cursor-pointer;
+    @apply px-4 py-2.5 w-full text-white bg-blue-600 disabled:bg-gray-400 hover:bg-blue-700 font-medium rounded-lg text-sm transition-colors mt-2 cursor-pointer;
+  }
+  .form_button-cancel {
+    @apply px-4 py-2.5 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition cursor-pointer;
+  }
+
+  .table {
+    @apply w-full text-sm text-left text-gray-500 border-collapse;
+  }
+  .table__thead {
+    @apply text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200;
+  }
+  .table__th {
+    @apply px-6 py-3 border-r border-gray-200;
+    &--center {
+      @apply text-center;
+    }
+  }
+  .table__td {
+    @apply px-6 py-4 border-r border-gray-200;
+    &--bold {
+      @apply font-semibold text-gray-900;
+    }
+  }
+
+  .table__button--block {
+    @apply p-2 rounded-lg transition-all duration-200 shadow-sm cursor-pointer;
+  }
+  .table__button--edit {
+    @apply p-2 text-amber-600 bg-amber-50 rounded-lg hover:bg-amber-600 hover:text-white transition-all duration-200 shadow-sm cursor-pointer;
+  }
+
+  .table__button--delete {
+    @apply p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 shadow-sm cursor-pointer;
   }
 }

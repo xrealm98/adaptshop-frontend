@@ -1,4 +1,5 @@
 import { Product } from './product.model';
+import { User } from './user.model';
 
 export interface OrderItem {
   id: number;
@@ -21,5 +22,6 @@ export interface Order {
   shipping_postal_code: string;
   shipping_country: string;
   created_at?: string;
+  user?: User;
   items?: OrderItem[];
 }

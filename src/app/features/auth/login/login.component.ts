@@ -27,8 +27,8 @@ export class LoginComponent {
         next: () => {
           this.router.navigate(['/']);
         },
-        error: (err) => {
-          error: () => (this.errorMessage = 'Credenciales incorrectas');
+        error: () => {
+          this.errorMessage = 'Credenciales incorrectas';
         },
       });
     }

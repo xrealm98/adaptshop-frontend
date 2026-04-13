@@ -1,0 +1,19 @@
+<div class="flex justify-between items-center mb-4">
+  <div class="relative w-72">
+    <input
+      type="text"
+      (input)="handleSearch($event)"
+      [placeholder]="placeholder()"
+      class="w-full p-2 pl-8 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+    />
+  </div>
+
+  @if (buttonLabel()) {
+    <button
+      (click)="handleAdd()"
+      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+    >
+      + {{ buttonLabel() }}
+    </button>
+  }
+</div>
