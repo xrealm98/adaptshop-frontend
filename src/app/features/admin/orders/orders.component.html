@@ -1,4 +1,7 @@
-<app-table-header placeholder="Buscar pedido por ID o cliente..." (onSearch)="onSearch($event)" />
+<app-table-header
+  placeholder="Buscar pedido por ID, cliente o ciudad"
+  (onSearch)="onSearch($event)"
+/>
 
 <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
   <table class="table">
@@ -16,7 +19,7 @@
       @for (order of filteredOrders(); track order.id) {
         <tr class="bg-white border-b border-gray-200 hover:bg-blue-50 transition-colors">
           <td class="px-6 py-4 border-r border-gray-200 font-mono text-sm text-gray-600">
-            #{{ order.id }}
+            {{ order.id }}
           </td>
           <td class="table__td">
             <div class="font-semibold text-gray-900">
@@ -25,13 +28,17 @@
             <div class="text-xs text-gray-400">{{ order.shipping_city }}</div>
           </td>
           <td class="table__td text-gray-600">
-            {{ order.created_at }}
+            {{ order.created_at | date: 'd/M/yy, h:mm a' }}
           </td>
           <td class="table__td font-bold text-gray-900">{{ order.total }}€</td>
-          <td class="table__td"></td>
+          <td class="table__td">
+            <span [class]="getStatusStyles(order.status)">
+              {{ getStatusLabel(order.status) }}
+            </span>
+          </td>
           <td class="px-6 py-4 flex justify-center gap-3">
             <button
-              [routerLink]="['/admin/orders', order.id]"
+              [routerLink]="['/admin/orders/edit', order.id]"
               class="table__button--edit"
               title="Editar pedido"
             >

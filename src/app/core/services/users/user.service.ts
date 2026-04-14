@@ -23,6 +23,10 @@ export class UserService {
     return this.http.put<User>(`${this.baseUrl}/users/${id}`, data);
   }
 
+  updateProfile(data: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/profile`, data);
+  }
+
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/users/${id}`);
   }

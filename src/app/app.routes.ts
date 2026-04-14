@@ -22,6 +22,34 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
       },
+      {
+        path: 'account',
+        loadComponent: () =>
+          import('./features/profile/profile-layout.component').then(
+            (m) => m.ProfileLayoutComponent,
+          ),
+        canActivate: [authGuard],
+        children: [
+          { path: '', redirectTo: 'perfil', pathMatch: 'full' },
+          {
+            path: 'profile',
+            loadComponent: () =>
+              import('./features/profile/pages/info/info.component').then((m) => m.InfoComponent),
+          },
+          {
+            path: 'orders',
+            loadComponent: () =>
+              import('./features/profile/pages/orders/orders.component').then(
+                (m) => m.OrdersComponent,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'catalog',
+        loadComponent: () =>
+          import('./features/catalog/catalog.component').then((m) => m.CatalogComponent),
+      },
     ],
   },
   {
@@ -77,6 +105,11 @@ export const routes: Routes = [
         path: 'orders',
         loadComponent: () =>
           import('./features/admin/orders/orders.component').then((m) => m.OrdersComponent),
+      },
+      {
+        path: 'orders/edit/:id',
+        loadComponent: () =>
+          import('./features/admin/orders/order/order-form').then((m) => m.OrderForm),
       },
       {
         path: 'users',

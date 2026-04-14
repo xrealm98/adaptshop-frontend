@@ -22,7 +22,7 @@ export class OrdersService {
     return this.http.post<Order>(`${this.baseUrl}`, orderData);
   }
 
-  updateOrderStatus(id: number, status: string): Observable<Order> {
-    return this.http.patch<Order>(`${this.baseUrl}/${id}/status`, { status });
+  updateOrder(id: number, orderData: Partial<Order>): Observable<Order> {
+    return this.http.patch<Order>(`${this.baseUrl}/orders/${id}/status`, orderData);
   }
 }

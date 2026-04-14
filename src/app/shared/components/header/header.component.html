@@ -13,9 +13,11 @@
         </svg>
       </div>
       <input
+        #searchInput
         type="search"
+        (keyup.enter)="onSearch(searchInput.value, searchInput)"
         placeholder="Busca un producto"
-        class="w-full h-12 pl-12 pr-4 bg-white rounded-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 focus:outline-none text-gray-800 shadow-inner"
+        class="header__search"
       />
     </div>
     <div>
@@ -70,7 +72,7 @@
               <ul class="p-2 text-sm text-gray-700 font-medium list-none">
                 <li>
                   <a
-                    routerLink="/perfil"
+                    routerLink="/account/profile"
                     (click)="isMenuOpen.set(false)"
                     class="flex items-center p-2 hover:bg-gray-100 rounded"
                   >
@@ -90,7 +92,7 @@
                 </li>
                 <li>
                   <a
-                    routerLink="/pedidos"
+                    routerLink="/account/orders"
                     (click)="isMenuOpen.set(false)"
                     class="flex items-center p-2 hover:bg-gray-100 rounded"
                   >
@@ -187,9 +189,28 @@
       </span>
     </button>
   </div>
-  <nav class="hidden md:flex items-center font-medium text-black-600 bg-[#DDD1D1] pl-24">
-    <a routerLink="/" class="header_link">Inicio</a>
-    <a routerLink="/productos" class="header_link">Tienda</a>
-    <a routerLink="/contacto" class="header_link">Contacto</a>
+  <nav
+    class="hidden md:flex items-center bg-[#DDD1D1] px-12 gap-8 overflow-x-auto border-t border-black/5"
+  >
+    <a
+      routerLink="/"
+      routerLinkActive="nav__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav__link"
+      >Inicio</a
+    >
+
+    @for (cat of categories(); track cat.id) {
+      <a
+        [routerLink]="['/catalog']"
+        [queryParams]="{ category: cat.id }"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        {{ cat.name }}
+      </a>
+    }
+
+    <a routerLink="/contacto" class="nav__link">Contacto</a>
   </nav>
 </header>

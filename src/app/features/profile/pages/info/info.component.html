@@ -1,0 +1,171 @@
+<section class="info-container animate-fade-in">
+  <div class="header-section flex justify-between items-center mb-10">
+    <div>
+      <h2 class="text-2xl font-black text-gray-800 tracking-tight">DATOS PERSONALES</h2>
+    </div>
+
+    <button
+      (click)="toggleEdit()"
+      type="button"
+      class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 transition-all font-bold text-sm cursor-pointer"
+      [class.border-blue-600]="!isEditing()"
+      [class.text-blue-600]="!isEditing()"
+      [class.border-gray-200]="isEditing()"
+      [class.text-gray-400]="isEditing()"
+    >
+      @if (!isEditing()) {
+        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+          />
+        </svg>
+        Editar Perfil
+      } @else {
+        Cancelar
+      }
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="input-group">
+        <label class="form_label">Nombre</label>
+        <input
+          formControlName="first_name"
+          [readonly]="!isEditing()"
+          class="form_input"
+          [class.form__input-readonly]="!isEditing()"
+          placeholder="Tu nombre"
+        />
+        @if (isFieldInvalid('first_name')) {
+          <span class="form_error">El nombre es obligatorio</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="form_label">Apellido</label>
+        <input
+          formControlName="last_name"
+          [readonly]="!isEditing()"
+          class="form_input"
+          [class.form__input-readonly]="!isEditing()"
+          placeholder="Tu apellido"
+        />
+        @if (isFieldInvalid('last_name')) {
+          <span class="form_error">El apellido es obligatorio</span>
+        }
+      </div>
+
+      <div class="input-group">
+        <label class="form_label">Teléfono</label>
+        <input
+          formControlName="phone"
+          [readonly]="!isEditing()"
+          class="form_input"
+          [class.form__input-readonly]="!isEditing()"
+          placeholder="Tu teléfono"
+        />
+      </div>
+
+      <div class="input-group">
+        <label class="form_label">Correo Electrónico</label>
+        <div class="relative">
+          <input
+            formControlName="email"
+            class="form_input bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pl-10"
+          />
+          <svg
+            class="size-5 absolute left-3 top-3 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-gray-100" />
+
+    <div>
+      <h3 class="text-lg font-bold text-gray-800 mb-6">Dirección de envío</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="input-group md:col-span-2">
+          <label class="form_label">Calle y número</label>
+          <input
+            formControlName="street"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="Ej. Calle Mayor 1, Puerta 2"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="form_label">Ciudad</label>
+          <input
+            formControlName="city"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="Ciudad"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="form_label">Provincia</label>
+          <input
+            formControlName="province"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="Provincia"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="form_label">Código Postal</label>
+          <input
+            formControlName="postal_code"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="Código Postal"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="form_label">País</label>
+          <input
+            formControlName="country"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="País"
+          />
+        </div>
+      </div>
+    </div>
+
+    @if (isEditing()) {
+      <div class="pt-6 border-t border-gray-100 flex justify-end">
+        <button
+          type="submit"
+          [disabled]="form.invalid"
+          class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer"
+        >
+          Actualizar mis datos
+        </button>
+      </div>
+    }
+  </form>
+</section>

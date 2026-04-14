@@ -46,6 +46,11 @@ export class AuthService {
     );
   }
 
+  updateCurrentUser(user: User) {
+    this.storage.setItem('user', user);
+    this.currentUser.set(user);
+  }
+
   logout() {
     return this.http.post(`${this.baseUrl}/logout`, {}).pipe(
       tap({
