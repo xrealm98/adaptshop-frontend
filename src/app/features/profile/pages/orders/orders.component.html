@@ -1,1 +1,111 @@
-<p>orders.component works!</p>
+<section class="orders-container animate-fade-in">
+  <h2 class="text-2xl font-black text-gray-800 tracking-tight mb-8">MIS PEDIDOS</h2>
+
+  <div class="space-y-4">
+    @for (order of orders(); track order.id) {
+      @let status = getStatusInfo(order.status);
+      <div class="order-card" [class.order-card--active]="orderId() === order.id">
+        <div
+          (click)="openOrder(order.id)"
+          class="flex flex-wrap items-center justify-between p-6 cursor-pointer transition-colors hover:bg-gray-50/50"
+        >
+          <div class="flex items-center gap-6">
+            <div class="hidden sm:block p-3 bg-blue-50 rounded-xl">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                Pedido #{{ order.id }}
+              </p>
+              <p class="font-bold text-gray-800">{{ order.created_at | date: 'dd MMM, yyyy' }}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-8">
+            <div class="text-right">
+              <p class="text-xs font-bold text-gray-400 uppercase">Total</p>
+              <p class="font-black text-blue-600 text-lg">
+                {{ order.total | currency: 'EUR' }}
+              </p>
+            </div>
+
+            <span [class]="status.css">
+              {{ status.label }}
+            </span>
+
+            <svg
+              class="size-5 text-gray-400 transition-transform duration-300"
+              [class.rotate-180]="orderId() === order.id"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+
+        @if (orderId() === order.id) {
+          <div class="border-t border-gray-100 p-6 bg-gray-50/30 animate-slide-down">
+            <h4 class="text-sm font-bold text-gray-500 uppercase mb-4 tracking-tighter">
+              Productos
+            </h4>
+            <div class="space-y-4">
+              @for (item of order.items; track item.id) {
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-4">
+                    <img
+                      [src]="item.product?.image"
+                      class="size-12 rounded-lg object-cover border border-gray-200"
+                      alt="Producto"
+                    />
+                    <div>
+                      <p class="font-bold text-gray-800 text-sm">{{ item.product?.name }}</p>
+                      <p class="text-xs text-gray-500">Cantidad: {{ item.quantity }}</p>
+                    </div>
+                  </div>
+                  <p class="font-bold text-gray-800">
+                    {{ item.unit_price | currency: 'EUR' }}
+                  </p>
+                </div>
+              }
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-10">
+              <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">
+                  Dirección de entrega
+                </p>
+                <p class="text-xs text-gray-600">
+                  {{ order.shipping_street }}, {{ order.shipping_city }}
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    } @empty {
+      <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+        <p class="text-gray-400 font-medium">Aún no has realizado ningún pedido.</p>
+      </div>
+    }
+  </div>
+</section>

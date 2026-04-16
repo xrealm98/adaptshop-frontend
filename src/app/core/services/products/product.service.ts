@@ -11,8 +11,18 @@ export class ProductService {
   private http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+  getProducts(params?: {
+    category_id?: number;
+    latest?: boolean;
+    limit?: number;
+  }): Observable<Product[]> {
+    let url = `${this.baseUrl}/products?`;
+
+    if (params?.category_id) url += `category_id=${params.category_id}&`;
+    if (params?.latest) url += `latest=true&`;
+    if (params?.limit) url += `limit=${params.limit}&`;
+
+    return this.http.get<Product[]>(url);
   }
 
   getProductById(id: number): Observable<Product> {

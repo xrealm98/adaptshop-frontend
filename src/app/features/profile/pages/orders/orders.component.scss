@@ -1,0 +1,43 @@
+@use 'tailwindcss';
+@layer components {
+  .orders-container {
+    @apply flex flex-col gap-4;
+  }
+
+  .order-card {
+    @apply bg-white rounded-2xl border-2 border-gray-100 transition-all duration-300 overflow-hidden;
+  }
+
+  .order-card--active {
+    @apply border-blue-200 shadow-xl shadow-blue-50;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out forwards;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

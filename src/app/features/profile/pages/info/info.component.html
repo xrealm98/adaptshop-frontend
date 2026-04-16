@@ -111,17 +111,6 @@
         </div>
 
         <div class="input-group">
-          <label class="form_label">Ciudad</label>
-          <input
-            formControlName="city"
-            [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
-            placeholder="Ciudad"
-          />
-        </div>
-
-        <div class="input-group">
           <label class="form_label">Provincia</label>
           <input
             formControlName="province"
@@ -133,13 +122,13 @@
         </div>
 
         <div class="input-group">
-          <label class="form_label">Código Postal</label>
+          <label class="form_label">Ciudad</label>
           <input
-            formControlName="postal_code"
+            formControlName="city"
             [readonly]="!isEditing()"
             class="form_input"
             [class.form__input-readonly]="!isEditing()"
-            placeholder="Código Postal"
+            placeholder="Ciudad"
           />
         </div>
 
@@ -151,6 +140,17 @@
             class="form_input"
             [class.form__input-readonly]="!isEditing()"
             placeholder="País"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="form_label">Código Postal</label>
+          <input
+            formControlName="postal_code"
+            [readonly]="!isEditing()"
+            class="form_input"
+            [class.form__input-readonly]="!isEditing()"
+            placeholder="Código Postal"
           />
         </div>
       </div>

@@ -1,0 +1,83 @@
+<div
+  class="group relative bg-white rounded-2xl border border-black-100 p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+>
+  <button
+    class="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm"
+  >
+    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+      />
+    </svg>
+  </button>
+
+  <div
+    class="relative aspect-square overflow-hidden rounded-xl mb-5 bg-gray-50 flex items-center justify-center p-6"
+  >
+    <img
+      [src]="product.image || 'assets/images/placeholder.webp'"
+      [alt]="product.name"
+      class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+    />
+  </div>
+
+  <div class="flex flex-col flex-1">
+    <div class="flex justify-between items-start gap-4 mb-2">
+      <h3
+        class="font-bold text-gray-800 text-sm md:text-base leading-tight uppercase tracking-tighter line-clamp-2"
+      >
+        {{ product.name }}
+      </h3>
+      <span
+        class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2 py-1 rounded-lg border border-blue-100 uppercase"
+      >
+        {{ product.stock }}U
+      </span>
+    </div>
+
+    <div class="flex justify-between items-center mt-auto mb-4">
+      <!--
+      <div class="flex items-center gap-1">
+        <div class="flex text-amber-400 text-xs">
+          <span>★</span><span>★</span><span>★</span><span>★</span
+          ><span class="text-gray-200">★</span>
+        </div>
+        <span class="text-[10px] text-gray-400 font-bold mt-0.5">(800)</span>
+      </div>
+-->
+      <span class="text-xl font-black text-gray-900 tracking-tight">
+        {{ product.price | currency: 'EUR' }}
+      </span>
+    </div>
+
+    <div
+      class="flex items-center justify-between bg-white rounded-xl border-2 border-green-400 overflow-hidden shadow-sm mt-auto"
+    >
+      <button
+        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+      >
+        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4" />
+        </svg>
+      </button>
+
+      <span class="font-black text-gray-800 px-10 text-lg">0</span>
+
+      <button
+        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+      >
+        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

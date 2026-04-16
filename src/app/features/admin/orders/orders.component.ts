@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { getOrderStatusInfo } from '../../../core/constants/order-status.config';
 import { OrdersService } from '../../../core/services/order/orders.service';
 import { Order } from '../../../models/order.model';
 import { TableHeader } from '../components/table-header/table-header';
@@ -13,6 +14,7 @@ import { TableHeader } from '../components/table-header/table-header';
 })
 export class OrdersComponent {
   private orderService = inject(OrdersService);
+  public getStatusInfo = getOrderStatusInfo;
   orders = signal<Order[]>([]);
   searchTerm = signal('');
 
@@ -43,29 +45,5 @@ export class OrdersComponent {
 
   onSearch(value: string) {
     this.searchTerm.set(value);
-  }
-  getStatusStyles(status: string): string {
-    const baseStyles = 'px-2 py-1 text-xs font-medium rounded-full';
-
-    const statusMap: Record<string, string> = {
-      pending: `${baseStyles} bg-yellow-100 text-yellow-700`,
-      paid: `${baseStyles} bg-blue-100 text-blue-700`,
-      shipped: `${baseStyles} bg-purple-100 text-purple-700`,
-      delivered: `${baseStyles} bg-green-100 text-green-700`,
-      cancelled: `${baseStyles} bg-red-100 text-red-700`,
-    };
-
-    return statusMap[status] || `${baseStyles} bg-gray-100 text-gray-700`;
-  }
-
-  getStatusLabel(status: string): string {
-    const labels: Record<string, string> = {
-      pending: 'Pendiente',
-      paid: 'Pagado',
-      shipped: 'Enviado',
-      delivered: 'Entregado',
-      cancelled: 'Cancelado',
-    };
-    return labels[status] || status;
   }
 }
