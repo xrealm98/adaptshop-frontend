@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -11,18 +11,32 @@ export class ProductService {
   private http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  getProducts(params?: {
-    category_id?: number;
-    latest?: boolean;
-    limit?: number;
-  }): Observable<Product[]> {
-    let url = `${this.baseUrl}/products?`;
+  getProducts(filters: any = {}): Observable<any> {
+    let params = new HttpParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        params = params.set(key, value.toString());
+      }
+    });
 
-    if (params?.category_id) url += `category_id=${params.category_id}&`;
-    if (params?.latest) url += `latest=true&`;
-    if (params?.limit) url += `limit=${params.limit}&`;
+    return this.http.get<any>(`${this.baseUrl}/products`, { params });
+  }
 
-    return this.http.get<Product[]>(url);
+  processCollection(res: any, sortBy: string) {
+    let list: Product[] = res.data;
+
+    if (sortBy !== 'default') {
+      list = [...list].sort((a, b) =>
+        sortBy === 'price_asc' ? a.price - b.price : b.price - a.price,
+      );
+    }
+
+    return {
+      items: list,
+      total: res.total,
+      currentPage: res.current_page,
+      totalPages: res.last_page,
+    };
   }
 
   getProductById(id: number): Observable<Product> {

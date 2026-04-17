@@ -36,7 +36,7 @@ export class DashboardComponent {
         const totalRevenue = res.orders.reduce((acc, order) => acc + Number(order.total), 0);
         this.total.set({
           orders: res.orders.length,
-          products: res.products.length,
+          products: res.products.total,
           users: res.users.length,
           categories: res.categories.length,
           revenue: totalRevenue,

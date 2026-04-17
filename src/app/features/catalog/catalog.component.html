@@ -1,1 +1,155 @@
-<p>catalog.component works!</p>
+<div class="max-w-400 mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex flex-col md:flex-row gap-6 lg:gap-10">
+    <!-- Sidebar de los filtros -->
+    <aside class="hidden md:block w-48 lg:w-66 shrink-0 border-r border-gray-100 pr-6">
+      <!-- Listado de las categorías -->
+      <div class="mb-6">
+        <h3 class="font-bold text-gray-800 mb-3">Categorías</h3>
+        <ul class="space-y-1">
+          <li>
+            <button
+              (click)="selectCategory(null)"
+              class="w-full text-left px-2 py-1.5 rounded text-sm transition cursor-pointer"
+              [class.font-bold]="filterSelectedCategory() === null"
+              [class.text-blue-600]="filterSelectedCategory() === null"
+            >
+              Todas
+            </button>
+          </li>
+          @for (cat of categories(); track cat.id) {
+            <li>
+              <button
+                (click)="selectCategory(cat.id)"
+                class="w-full text-left px-2 py-1.5 rounded text-sm transition hover:text-blue-600 cursor-pointer"
+                [class.font-bold]="filterSelectedCategory() === cat.id"
+                [class.text-blue-600]="filterSelectedCategory() === cat.id"
+              >
+                {{ cat.name }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Filtro precio -->
+      <div class="mb-6">
+        <h3 class="font-bold text-gray-800 mb-3">Precio</h3>
+        <div class="flex gap-2">
+          <input
+            type="number"
+            [value]="filterMinPrice()"
+            (input)="updateMinPrice($event)"
+            placeholder="Min"
+            min="0"
+            class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number"
+            [value]="filterMaxPrice()"
+            (change)="updateMaxPrice($event)"
+            placeholder="Max"
+            min="0"
+            class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
+      <!-- Ordenar -->
+      <div class="mb-6">
+        <h3 class="font-bold text-gray-800 mb-3">Ordenar por</h3>
+        <select
+          [value]="filterSortBy()"
+          (change)="updateSort($event)"
+          class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="default">Relevancia</option>
+          <option value="price_asc">Precio más bajo</option>
+          <option value="price_desc">Precio más alto</option>
+        </select>
+      </div>
+
+      <button
+        (click)="clearFilters()"
+        class="w-full text-sm text-red-500 hover:text-red-700 transition text-left"
+      >
+        Limpiar filtros
+      </button>
+    </aside>
+
+    <!-- Productos -->
+    <div class="flex-1">
+      <app-breadcrumb [items]="breadcrumbs()"></app-breadcrumb>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div>
+          @if (searchTerm()) {
+            <h1 class="text-xl lg:text-2xl font-black text-gray-800">
+              Resultados para "{{ searchTerm() }}"
+            </h1>
+          } @else if (filterSelectedCategory()) {
+            <h1 class="text-2xl font-black text-gray-800">{{ selectedCategoryName() }}</h1>
+          } @else {
+            <h1 class="text-2xl font-black text-gray-800">Todos los productos</h1>
+          }
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 my-4 font-bold text-right">
+        Se están mostrando {{ products().length }} de {{ totalResults() }} resultados totales.
+      </p>
+
+      <!-- Grid productos -->
+      @if (products().length > 0) {
+        <div
+          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
+        >
+          @for (product of products(); track product.id) {
+            <app-product-card [product]="product" />
+          }
+        </div>
+
+        @if (totalPages() > 1) {
+          <div class="flex justify-center mt-12 border-t pt-6">
+            <nav class="flex items-center bg-gray-200 rounded-md overflow-hidden shadow-sm">
+              <button
+                (click)="goToPage(currentPage() - 1)"
+                [disabled]="currentPage() === 1"
+                class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
+              >
+                <span class="sr-only">Anterior</span>
+                &lt;
+              </button>
+
+              @for (page of visiblePages(); track page) {
+                <button
+                  (click)="goToPage(page)"
+                  class="px-4 py-2 text-sm font-medium transition min-w-11.25 cursor-pointer"
+                  [class.bg-blue-600]="currentPage() === page"
+                  [class.text-white]="currentPage() === page"
+                  [class.text-gray-700]="currentPage() !== page"
+                  [class.hover:bg-gray-300]="currentPage() !== page"
+                >
+                  {{ page }}
+                </button>
+              }
+
+              <button
+                (click)="goToPage(currentPage() + 1)"
+                [disabled]="currentPage() === totalPages()"
+                class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
+              >
+                <span class="sr-only">Siguiente</span>
+                &gt;
+              </button>
+            </nav>
+          </div>
+        }
+      } @else {
+        <div class="py-20 text-center">
+          <p class="text-gray-400 text-lg font-medium">No se encontraron productos.</p>
+          <button (click)="clearFilters()" class="mt-4 text-blue-600 hover:underline text-sm">
+            Limpiar filtros
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>

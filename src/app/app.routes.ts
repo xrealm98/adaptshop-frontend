@@ -23,6 +23,13 @@ export const routes: Routes = [
           import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
       },
       {
+        path: 'product/:id',
+        loadComponent: () =>
+          import('./features/products/pages/product-detail/product-detail.component').then(
+            (m) => m.ProductDetailComponent,
+          ),
+      },
+      {
         path: 'account',
         loadComponent: () =>
           import('./features/profile/profile-layout.component').then(

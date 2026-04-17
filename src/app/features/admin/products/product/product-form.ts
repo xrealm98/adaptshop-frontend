@@ -25,6 +25,7 @@ export class ProductForm {
   form = this.fb.nonNullable.group({
     category_id: [0, [Validators.required, Validators.min(1)]],
     name: ['', [Validators.required]],
+    details: ['', [Validators.maxLength(500)]],
     description: ['', [Validators.required]],
     price: [0, [Validators.required, Validators.min(0)]],
     stock: [0, [Validators.required, Validators.min(0)]],
@@ -43,6 +44,7 @@ export class ProductForm {
           this.form.patchValue({
             category_id: product.category_id,
             name: product.name,
+            details: product.details ?? '',
             description: product.description,
             price: product.price,
             stock: product.stock,

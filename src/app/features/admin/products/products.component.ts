@@ -26,9 +26,9 @@ export class ProductsComponent {
   }
 
   loadProducts() {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products.set(products);
+    this.productService.getProducts({ page: 1, per_page: 16 }).subscribe({
+      next: (res) => {
+        this.products.set(res.data);
       },
       error: (error) => {
         1;

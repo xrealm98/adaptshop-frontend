@@ -38,12 +38,25 @@
         </div>
 
         <div class="col-span-2">
-          <label class="form_label">Descripción</label>
+          <label class="form_label">Detalles del producto</label>
+          <textarea
+            formControlName="details"
+            class="form_input"
+            rows="5"
+            placeholder="Breve resumen para el detalle del producto (máx. 500 caracteres)"
+          ></textarea>
+          @if (form.get('details')?.errors?.['maxlength']) {
+            <span class="form_error">El resumen no puede superar los 500 caracteres</span>
+          }
+        </div>
+
+        <div class="col-span-2">
+          <label class="form_label">Descripción completa</label>
           <textarea
             formControlName="description"
             class="form_input"
-            rows="3"
-            placeholder="Descripción del producto"
+            rows="5"
+            placeholder="Descripción extensa del producto"
           ></textarea>
           @if (form.get('description')?.invalid && form.get('description')?.touched) {
             <span class="form_error">La descripción es obligatoria</span>

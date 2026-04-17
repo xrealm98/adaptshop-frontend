@@ -1,0 +1,107 @@
+@if (product(); as p) {
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <app-breadcrumb [items]="breadcrumbs()" />
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+      <div
+        class="lg:col-span-5 relative bg-gray-100 rounded-2xl aspect-square overflow-hidden flex items-center justify-center"
+      >
+        <img
+          [src]="p.image && p.image.trim() !== '' ? p.image : '/images/placeholder.svg'"
+          [alt]="p.name"
+          class="w-full h-full object-cover mix-blend-multiply"
+        />
+      </div>
+
+      <div class="lg:col-span-4 flex flex-col justify-start">
+        <h1 class="text-3xl font-black text-gray-900 mb-3 leading-tight">{{ p.name }}</h1>
+
+        <div class="flex items-center gap-2 mb-6"></div>
+
+        <div class="mb-4">
+          <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wide mb-2">
+            Detalles rápidos
+          </h3>
+          <p class="text-gray-600 line-clamp-4">{{ p.description }}</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="bg-gray-100 p-6 rounded-2xl">
+          <div class="flex items-end gap-3 mb-2">
+            <span class="text-4xl font-black text-gray-900">{{ p.price }} €</span>
+          </div>
+
+          <p class="text-sm text-gray-600 mb-6">
+            @if (p.stock > 0) {
+              <span class="text-green-600 font-semibold">{{ p.stock }} unidades disponibles</span>
+            } @else {
+              <span class="text-red-600 font-semibold">Agotado temporalmente</span>
+            }
+          </p>
+
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-800 mb-2">Cantidad</label>
+            <div
+              class="flex items-center w-full bg-white border border-gray-300 rounded-lg overflow-hidden h-12"
+            >
+              <button
+                (click)="decreaseQuantity()"
+                [disabled]="quantity() <= 0"
+                class="w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 cursor-pointer text-xl transition-colors"
+              >
+                -
+              </button>
+              <input
+                type="text"
+                [value]="quantity()"
+                readonly
+                class="flex-1 h-full text-center font-bold text-gray-900 outline-none w-10"
+              />
+              <button
+                (click)="increaseQuantity()"
+                [disabled]="quantity() >= p.stock"
+                class="w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 cursor-pointer text-xl transition-colors"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <button
+            (click)="addToCart()"
+            [disabled]="p.stock === 0 || quantity() === 0"
+            [class]="
+              p.stock > 0 && quantity() > 0
+                ? 'w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer'
+                : 'w-full bg-gray-300 text-gray-500 font-bold py-4 rounded-xl cursor-not-allowed'
+            "
+          >
+            Añadir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-gray-200 mb-12" />
+
+    <div class="mb-16 max-w-3xl">
+      <h2 class="text-2xl font-black text-gray-900 mb-4">Información del producto</h2>
+      <div class="prose prose-gray">
+        <p class="text-gray-600 leading-relaxed text-lg">
+          {{ p.description }}
+        </p>
+      </div>
+    </div>
+
+    @if (relatedProducts().length > 0) {
+      <div class="mt-16">
+        <app-product-slider title="Productos relacionados" [products]="relatedProducts()" />
+      </div>
+    }
+  </div>
+} @else {
+  <div class="flex justify-center items-center h-96">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+  </div>
+}
