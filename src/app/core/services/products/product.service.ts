@@ -43,6 +43,10 @@ export class ProductService {
     return this.http.get<Product>(`${this.baseUrl}/products/${id}`);
   }
 
+  getProductsByIds(ids: number[]): Observable<Product[]> {
+    return this.http.post<Product[]>(`${this.baseUrl}/products/ids`, { ids });
+  }
+
   createProduct(data: Partial<Product>): Observable<Product> {
     return this.http.post<Product>(`${this.baseUrl}/products`, data);
   }

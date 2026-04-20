@@ -69,28 +69,6 @@ export class CatalogComponent {
       next: (categories) => this.categories.set(categories),
     });
   }
-
-  updateMinPrice(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.filterMinPrice.set(value ? Number(value) : null);
-    this.loadProducts(1);
-  }
-
-  updateMaxPrice(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.filterMaxPrice.set(value ? Number(value) : null);
-    this.loadProducts(1);
-  }
-
-  updateSort(event: Event) {
-    const value = (event.target as HTMLSelectElement).value as
-      | 'default'
-      | 'price_asc'
-      | 'price_desc';
-    this.filterSortBy.set(value);
-    this.loadProducts(this.currentPage());
-  }
-
   loadProducts(page: number = 1) {
     const filters = this.buildFilters(page);
     this.productService.getProducts(filters).subscribe({
@@ -116,6 +94,27 @@ export class CatalogComponent {
     this.totalResults.set(processed.total);
     this.currentPage.set(processed.currentPage);
     this.totalPages.set(processed.totalPages);
+  }
+
+  updateMinPrice(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.filterMinPrice.set(value ? Number(value) : null);
+    this.loadProducts(1);
+  }
+
+  updateMaxPrice(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.filterMaxPrice.set(value ? Number(value) : null);
+    this.loadProducts(1);
+  }
+
+  updateSort(event: Event) {
+    const value = (event.target as HTMLSelectElement).value as
+      | 'default'
+      | 'price_asc'
+      | 'price_desc';
+    this.filterSortBy.set(value);
+    this.loadProducts(this.currentPage());
   }
 
   selectCategory(categoryId: number | null) {

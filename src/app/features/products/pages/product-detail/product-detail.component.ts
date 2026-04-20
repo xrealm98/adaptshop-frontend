@@ -1,6 +1,7 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { CartService } from '../../../../core/services/cart/cart.service';
 import { ProductService } from '../../../../core/services/products/product.service';
 import { Breadcrumb } from '../../../../models/breadcrumb.model';
 import { Product } from '../../../../models/product.model';
@@ -16,10 +17,27 @@ import { ProductSliderComponent } from '../../../../shared/components/product-sl
 export class ProductDetailComponent {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
+  private cartService = inject(CartService);
 
   product = signal<Product | null>(null);
   relatedProducts = signal<Product[]>([]);
+
+  itemQuantity = computed(() => {
+    const item = this.cartService.cartItems().find((i) => i.id === this.product()?.id);
+    return item?.quantity ?? 0;
+  });
+
   quantity = signal<number>(0);
+
+  constructor() {
+    effect(
+      () => {
+        const cartQuantity = this.itemQuantity();
+        this.quantity.set(cartQuantity);
+      },
+      { allowSignalWrites: true },
+    );
+  }
 
   ngOnInit() {
     this.route.paramMap
@@ -32,7 +50,7 @@ export class ProductDetailComponent {
       .subscribe({
         next: (prod) => {
           this.product.set(prod);
-          this.quantity.set(0);
+          this.quantity.set(this.itemQuantity());
           this.loadRelatedProducts(prod.category_id);
         },
         error: (err) => console.error('Error cargando el producto', err),
@@ -74,6 +92,18 @@ export class ProductDetailComponent {
   }
 
   addToCart() {
-    console.log(`Añadido al carrito: ${this.quantity()} unidades de ${this.product()?.name}`);
+    const p = this.product();
+    if (!p || this.quantity() === 0) return;
+    const exists = this.cartService.cartItems().some((i) => i.id === p.id);
+
+    if (exists) {
+      this.cartService.updateQuantity(p.id, this.quantity());
+    } else {
+      this.cartService.addCartItem(p.id, true);
+      if (this.quantity() > 1) {
+        this.cartService.updateQuantity(p.id, this.quantity());
+      }
+    }
+    this.cartService.openSidebar();
   }
 }

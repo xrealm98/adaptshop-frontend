@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { CartService } from '../../../core/services/cart/cart.service';
 import { CategoryService } from '../../../core/services/categories/category.service';
 import { Category } from '../../../models/category.model';
 
@@ -12,6 +13,7 @@ import { Category } from '../../../models/category.model';
 })
 export class HeaderComponent {
   public authService = inject(AuthService);
+  cartService = inject(CartService);
   public router = inject(Router);
   private categoryService = inject(CategoryService);
   private eRef = inject(ElementRef);
