@@ -15,11 +15,15 @@ export class CartSidebar {
 
   goToCart() {
     this.cartService.closeSidebar();
-    this.router.navigate(['/cart']);
+    setTimeout(() => {
+      this.router.navigate(['/cart']);
+    }, 50);
   }
 
   goToCheckout() {
     this.cartService.closeSidebar();
-    this.router.navigate(['/checkout']);
+    setTimeout(() => {
+      this.router.navigate(['/checkout']);
+    }, 50);
   }
 }

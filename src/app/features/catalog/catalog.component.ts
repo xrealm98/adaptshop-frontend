@@ -1,4 +1,5 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../core/services/categories/category.service';
 import { ProductService } from '../../core/services/products/product.service';
@@ -20,6 +21,7 @@ export class CatalogComponent {
   private router = inject(Router);
   private productService = inject(ProductService);
   private categoryService = inject(CategoryService);
+  private title = inject(Title);
 
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
@@ -52,6 +54,12 @@ export class CatalogComponent {
   breadcrumbs = computed<Breadcrumb[]>(() => {
     const catName = this.selectedCategoryName();
     return catName ? [{ label: catName }] : [{ label: 'Todos los productos' }];
+  });
+
+  private titleEffect = effect(() => {
+    const categoryName = this.selectedCategoryName();
+    const baseTitle = categoryName ? `Catálogo | ${categoryName}` : 'Catálogo';
+    this.title.setTitle(`${baseTitle}`);
   });
 
   ngOnInit() {

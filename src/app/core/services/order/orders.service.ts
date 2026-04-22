@@ -19,7 +19,7 @@ export class OrdersService {
   }
 
   createOrder(orderData: any): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}`, orderData);
+    return this.http.post<Order>(`${this.baseUrl}/orders`, orderData);
   }
 
   updateOrder(id: number, orderData: Partial<Order>): Observable<Order> {

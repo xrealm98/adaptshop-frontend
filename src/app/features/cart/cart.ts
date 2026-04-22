@@ -14,9 +14,6 @@ export class Cart {
   private router = inject(Router);
   private location = inject(Location);
 
-  ngOnInit() {
-    this.cartService.refreshCartFromBackend();
-  }
   goToCheckout() {
     this.router.navigate(['/checkout']);
   }

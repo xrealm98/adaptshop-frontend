@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { UserService } from '../../../../core/services/users/user.service';
@@ -15,6 +16,7 @@ export class InfoComponent {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   public authService = inject(AuthService);
+  private title = inject(Title);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -33,6 +35,7 @@ export class InfoComponent {
   });
 
   ngOnInit() {
+    this.title.setTitle(`Perfil | Datos de la cuenta`);
     this.loadUser();
   }
   loadUser() {

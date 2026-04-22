@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { CartService } from '../../../../core/services/cart/cart.service';
@@ -18,6 +19,7 @@ export class ProductDetailComponent {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private title = inject(Title);
 
   product = signal<Product | null>(null);
   relatedProducts = signal<Product[]>([]);
@@ -43,13 +45,14 @@ export class ProductDetailComponent {
     this.route.paramMap
       .pipe(
         switchMap((params) => {
-          const id = Number(params.get('id'));
-          return this.productService.getProductById(id);
+          const slug = params.get('slug')!;
+          return this.productService.getProductBySlug(slug);
         }),
       )
       .subscribe({
         next: (prod) => {
           this.product.set(prod);
+          this.title.setTitle(`Detalle del producto | ${prod.name}`);
           this.quantity.set(this.itemQuantity());
           this.loadRelatedProducts(prod.category_id);
         },

@@ -1,5 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { getOrderStatusInfo } from '../../../../core/constants/order-status.config';
 import { OrdersService } from '../../../../core/services/order/orders.service';
 import { Order } from '../../../../models/order.model';
@@ -11,12 +12,14 @@ import { Order } from '../../../../models/order.model';
 })
 export class OrdersComponent {
   public orderService = inject(OrdersService);
+  private title = inject(Title);
   public getStatusInfo = getOrderStatusInfo;
 
   orders = signal<Order[]>([]);
   orderId = signal<number | null>(null);
 
   ngOnInit() {
+    this.title.setTitle(`Perfil | Pedidos`);
     this.loadOrders();
   }
   openOrder(id: number) {

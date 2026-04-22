@@ -6,11 +6,12 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 @Component({
   selector: 'app-register.component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -18,6 +19,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private title = inject(Title);
   errorMessage = '';
   registerForm = this.fb.nonNullable.group(
     {
@@ -31,6 +33,9 @@ export class RegisterComponent {
       validators: this.passwordMatchValidator,
     },
   );
+  constructor() {
+    this.title.setTitle(`Registro`);
+  }
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirm = control.get('password_confirmation');

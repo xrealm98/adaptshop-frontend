@@ -23,11 +23,26 @@ export const routes: Routes = [
           import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
       },
       {
-        path: 'product/:id',
+        path: 'product/:slug',
         loadComponent: () =>
           import('./features/products/pages/product-detail/product-detail.component').then(
             (m) => m.ProductDetailComponent,
           ),
+      },
+      {
+        path: 'catalog',
+        loadComponent: () =>
+          import('./features/catalog/catalog.component').then((m) => m.CatalogComponent),
+      },
+      {
+        path: 'cart',
+        loadComponent: () => import('./features/cart/cart').then((m) => m.Cart),
+      },
+      {
+        path: 'checkout',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
       },
       {
         path: 'account',
@@ -51,15 +66,6 @@ export const routes: Routes = [
               ),
           },
         ],
-      },
-      {
-        path: 'catalog',
-        loadComponent: () =>
-          import('./features/catalog/catalog.component').then((m) => m.CatalogComponent),
-      },
-      {
-        path: 'cart',
-        loadComponent: () => import('./features/cart/cart').then((m) => m.Cart),
       },
     ],
   },

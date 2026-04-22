@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { CategoryService } from '../../core/services/categories/category.service';
 import { ProductService } from '../../core/services/products/product.service';
 import { Category } from '../../models/category.model';
@@ -16,14 +17,18 @@ import { HeroBannerComponent } from './components/hero-banner/hero-banner.compon
 export class HomeComponent {
   private productService = inject(ProductService);
   private categoryService = inject(CategoryService);
+  private title = inject(Title);
 
   latestProducts = signal<Product[]>([]);
   featuredCategory = signal<Category | null>(null);
   featuredProducts = signal<Product[]>([]);
+  categories = signal<Category[]>([]);
 
   ngOnInit() {
+    this.title.setTitle(`Inicio`);
     this.loadLatestProducts();
     this.loadFeaturedCategory();
+    this.loadCategoriesSection();
   }
 
   loadLatestProducts() {
@@ -43,6 +48,12 @@ export class HomeComponent {
           });
         }
       },
+    });
+  }
+
+  loadCategoriesSection() {
+    this.categoryService.getCategories().subscribe((cats) => {
+      this.categories.set(cats.slice(0, 4));
     });
   }
 }

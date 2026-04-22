@@ -46,9 +46,13 @@ export class AuthService {
     );
   }
 
-  updateCurrentUser(user: User) {
-    this.storage.setItem('user', user);
-    this.currentUser.set(user);
+  updateCurrentUser(partialUser: Partial<User>) {
+    const currentUser = this.currentUser();
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...partialUser };
+      this.storage.setItem('user', updatedUser);
+      this.currentUser.set(updatedUser);
+    }
   }
 
   logout() {
