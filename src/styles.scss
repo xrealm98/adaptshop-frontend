@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'tailwindcss';
 
+@use 'swiper/css';
+@use 'swiper/css/navigation';
+@use 'swiper/css/pagination';
+
 html,
 body {
   height: 100%;
@@ -8,6 +12,41 @@ body {
 
 body {
   background-color: #ffffff;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+swiper-container::part(button-prev),
+swiper-container::part(button-next) {
+  background-color: white;
+  width: 45px;
+  height: 45px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #16a34a;
+  padding: 0.25rem 0;
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s ease;
+}
+
+swiper-container::part(button-prev):hover,
+swiper-container::part(button-next):hover {
+  background-color: #16a34a;
+  color: white;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  swiper-container::part(button-prev),
+  swiper-container::part(button-next) {
+    display: none;
+  }
 }
 
 @layer components {
