@@ -1,0 +1,22 @@
+<nav class="flex text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
+  <ol class="inline-flex items-center space-x-2">
+    <li><a routerLink="/" class="hover:text-green-600 transition-colors">Inicio</a></li>
+
+    @for (item of items(); track item.label; let last = $last) {
+      <li><span class="mx-1">/</span></li>
+      <li class="capitalize" [class.text-gray-800]="last" [class.font-medium]="last">
+        @if (!last && item.url) {
+          <a
+            [routerLink]="[item.url]"
+            [queryParams]="item.queryParams"
+            class="hover:text-green-600 transition-colors"
+          >
+            {{ item.label }}
+          </a>
+        } @else {
+          <span>{{ item.label }}</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

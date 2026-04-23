@@ -1,0 +1,113 @@
+<div class="max-w-5xl mx-auto pb-10">
+  <div class="flex items-center gap-3 mb-8">
+    <button
+      type="button"
+      (click)="goBack()"
+      class="text-gray-500 hover:text-gray-800 transition p-2 hover:bg-gray-100 rounded-full cursor-pointer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+    <h2 class="text-2xl font-bold text-gray-800">Editar Usuario</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 flex flex-col gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Información Personal</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="form_label">Nombre (*)</label>
+            <input formControlName="first_name" type="text" class="form_input" />
+            @if (isFieldInvalid('first_name')) {
+              <p class="form_error">El nombre es obligatorio.</p>
+            }
+          </div>
+          <div>
+            <label class="form_label">Apellido (*)</label>
+            <input formControlName="last_name" type="text" class="form_input" />
+            @if (isFieldInvalid('last_name')) {
+              <p class="form_error">El apellido es obligatorio.</p>
+            }
+          </div>
+          <div class="md:col-span-2">
+            <label class="form_label">Email (Solo lectura)</label>
+            <input formControlName="email" type="email" class="form_input bg-gray-50" />
+          </div>
+          <div>
+            <label class="form_label">Teléfono</label>
+            <input formControlName="phone" type="text" class="form_input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Dirección</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="md:col-span-2">
+            <label class="form_label">Calle</label>
+            <input formControlName="street" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Ciudad</label>
+            <input formControlName="city" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Provincia</label>
+            <input formControlName="province" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Código Postal</label>
+            <input formControlName="postal_code" type="text" class="form_input" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Ajustes</h3>
+
+        <div class="mb-6">
+          <label class="form_label">Rol</label>
+          <select formControlName="role" class="form_input">
+            <option value="client">Cliente</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100">
+          <input
+            formControlName="is_blocked"
+            type="checkbox"
+            id="is_blocked"
+            class="w-5 h-5 text-red-600 rounded"
+          />
+          <label for="is_blocked" class="text-sm font-bold text-red-700 cursor-pointer"
+            >Bloquear Cuenta</label
+          >
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <button type="submit" [disabled]="form.invalid" class="form_button w-full py-4 font-bold">
+        Guardar Cambios
+      </button>
+      <button type="button" (click)="goBack()" class="form_button-cancel w-full py-3">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

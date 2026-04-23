@@ -1,0 +1,219 @@
+<header class="bg-[#797676]">
+  <div class="flex place-content-around py-6">
+    <a routerLink="/" class="text-4xl font-bold text-gray-800 cursor-pointer">AdaptShop</a>
+    <div class="hidden md:flex grow max-w-2xl relative">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+      </div>
+      <input
+        #searchInput
+        type="search"
+        (keyup.enter)="onSearch(searchInput.value, searchInput)"
+        placeholder="Busca un producto"
+        class="header__search"
+      />
+    </div>
+    <div>
+      @if (authService.isAuthenticated()) {
+        <div class="relative inline-block text-left">
+          <button
+            (click)="toggleMenu()"
+            class="inline-flex items-center justify-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none transition-colors"
+            type="button"
+          >
+            <span>Perfil</span>
+            <svg
+              class="w-4 h-4 ms-2 transition-transform"
+              [class.rotate-180]="isMenuOpen()"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m19 9-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          @if (isMenuOpen()) {
+            <div
+              class="absolute right-0 z-50 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg w-72 divide-y divide-gray-100"
+            >
+              <div class="p-4">
+                <div class="flex items-center space-x-3 bg-gray-50 p-2 rounded-lg">
+                  <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-sm truncate">
+                    <div class="font-bold text-gray-900">{{ authService.user()?.first_name }}</div>
+                    <div class="text-gray-500">{{ authService.user()?.email }}</div>
+                  </div>
+                  @if (authService.isAdmin()) {
+                    <span
+                      class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded ml-auto"
+                      >ADMIN</span
+                    >
+                  }
+                </div>
+              </div>
+
+              <ul class="p-2 text-sm text-gray-700 font-medium list-none">
+                <li>
+                  <a
+                    routerLink="/account/profile"
+                    (click)="isMenuOpen.set(false)"
+                    class="flex items-center p-2 hover:bg-gray-100 rounded"
+                  >
+                    <svg
+                      class="w-4 h-4 me-2 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                      />
+                    </svg>
+                    Mi Cuenta
+                  </a>
+                </li>
+                <li>
+                  <a
+                    routerLink="/account/orders"
+                    (click)="isMenuOpen.set(false)"
+                    class="flex items-center p-2 hover:bg-gray-100 rounded"
+                  >
+                    <svg
+                      class="w-4 h-4 me-2 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-width="2"
+                        d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"
+                      />
+                    </svg>
+                    Mis Pedidos
+                  </a>
+                </li>
+                @if (authService.isAdmin()) {
+                  <li class="mt-1">
+                    <a
+                      routerLink="/admin"
+                      (click)="isMenuOpen.set(false)"
+                      class="flex items-center p-2 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded font-bold"
+                    >
+                      <svg
+                        class="w-4 h-4 me-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-width="2"
+                          d="M12 6V4m0 2a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m-6 8a2 2 0 1 0 0-4m0 4a2 2 0 1 1 0-4m0 4H4m6-2h10m-6 2a2 2 0 1 0 0-4m0 4a2 2 0 1 1 0-4m0 4h4m-10-2h-2"
+                        />
+                      </svg>
+                      Administración
+                    </a>
+                  </li>
+                }
+              </ul>
+
+              <div class="p-2">
+                <button
+                  (click)="logout(); isMenuOpen.set(false)"
+                  class="flex items-center w-full p-2 text-red-600 hover:bg-red-50 rounded text-sm font-medium transition-colors cursor-pointer"
+                >
+                  <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-width="2"
+                      d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+                    />
+                  </svg>
+                  Cerrar sesión
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <button
+          routerLink="/login"
+          class="px-5 py-2.5 rounded-lg font-semibold text-black-800 hover:bg-gray-100 transition cursor-pointer"
+        >
+          Iniciar sesión
+        </button>
+        <button
+          routerLink="/register"
+          class="px-5 py-2.5 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200 transition cursor-pointer"
+        >
+          Registro
+        </button>
+      }
+    </div>
+    <button
+      (click)="cartService.toggleSidebar()"
+      class="relative group p-2 transition-transform hover:scale-110 cursor-pointer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-10"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+        />
+      </svg>
+
+      @if (cartService.totalItems() > 0) {
+        <span
+          class="absolute bottom-1 left-1 bg-green-600 text-white text-xs rounded-full border w-5 h-5 flex items-center justify-center"
+        >
+          {{ cartService.totalItems() }}
+        </span>
+      }
+    </button>
+  </div>
+  <nav
+    class="hidden md:flex items-center bg-[#DDD1D1] px-12 gap-8 overflow-x-auto border-t border-black/5"
+  >
+    <a
+      routerLink="/"
+      routerLinkActive="nav__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav__link"
+      >Inicio</a
+    >
+
+    @for (cat of categories(); track cat.id) {
+      <a
+        [routerLink]="['/catalog']"
+        [queryParams]="{ category: cat.id }"
+        routerLinkActive="nav__link--active"
+        class="nav__link"
+      >
+        {{ cat.name }}
+      </a>
+    }
+  </nav>
+</header>

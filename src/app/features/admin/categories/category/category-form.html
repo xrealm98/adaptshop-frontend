@@ -1,0 +1,49 @@
+<div class="max-w-lg mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <button (click)="goBack()" class="text-gray-500 hover:text-gray-700 cursor-pointer transition">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+    <h2 class="text-xl font-semibold text-gray-800">
+      {{ isEditMode ? 'Editar categoría' : 'Nueva categoría' }}
+    </h2>
+  </div>
+
+  <div class="form">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <div>
+        <label class="form_label">Nombre de la categoría</label>
+        <input
+          formControlName="name"
+          type="text"
+          class="form_input"
+          placeholder="Ej: Ropa deportiva"
+        />
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <span class="form_error"
+            >El nombre es obligatorio y debe tener al menos 2 caracteres</span
+          >
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 mt-2">
+        <button type="button" (click)="goBack()" class="form_button-cancel">Cancelar</button>
+        <button type="submit" [disabled]="form.invalid" class="form_button w-auto">
+          {{ isEditMode ? 'Guardar cambios' : 'Crear categoría' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

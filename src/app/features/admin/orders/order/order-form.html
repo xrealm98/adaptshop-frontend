@@ -1,0 +1,123 @@
+<div class="max-w-6xl mx-auto pb-10">
+  <div class="flex items-center gap-3 mb-8">
+    <button
+      type="button"
+      (click)="goBack()"
+      class="text-gray-500 hover:text-gray-800 transition p-2 hover:bg-gray-100 rounded-full cursor-pointer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+    <h2 class="text-2xl font-bold text-gray-800">Gestionar Pedido #{{ orderId }}</h2>
+  </div>
+
+  <form
+    [formGroup]="orderForm"
+    (ngSubmit)="onSubmit()"
+    class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+  >
+    <div class="lg:col-span-2 flex flex-col gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Dirección de Entrega</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="md:col-span-2">
+            <label class="form_label">Calle y Número (*)</label>
+            <input formControlName="shipping_street" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Ciudad (*)</label>
+            <input formControlName="shipping_city" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Provincia (*)</label>
+            <input formControlName="shipping_province" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">Código Postal (*)</label>
+            <input formControlName="shipping_postal_code" type="text" class="form_input" />
+          </div>
+          <div>
+            <label class="form_label">País (*)</label>
+            <input formControlName="shipping_country" type="text" class="form_input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Productos del Pedido</h3>
+        <div class="overflow-hidden border border-gray-100 rounded-xl">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="table__th">Producto</th>
+                <th class="table__th">Cant.</th>
+                <th class="table__th">Precio</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              @for (item of order?.items; track item.id) {
+                <tr>
+                  <td class="table__td">
+                    <span class="text-sm font-medium text-gray-900">{{ item.product?.name }}</span>
+                  </td>
+                  <td class="table__td">{{ item.quantity }}</td>
+                  <td class="table__td">{{ item.unit_price }}€</td>
+                </tr>
+              }
+            </tbody>
+            <tfoot class="bg-blue-50/50 font-bold">
+              <tr>
+                <td colspan="2" class="table__td">Total Pagado</td>
+                <td class="table__td text-right text-blue-600 text-lg">{{ order?.total }}€</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h3 class="text-lg font-bold mb-5 text-gray-700">Estado del Envío</h3>
+
+        <div class="mb-6">
+          <label class="form_label">Estado Actual</label>
+          <select formControlName="status" class="form_input">
+            <option value="pending">Pendiente</option>
+            <option value="paid">Pagado (Preparando)</option>
+            <option value="shipped">Enviado</option>
+            <option value="delivered">Entregado</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+          <p class="text-[11px] text-gray-400 mt-2 italic">
+            Cambia a "Enviado" solo cuando el paquete haya salido del almacén.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3">
+      <button
+        type="submit"
+        [disabled]="orderForm.invalid"
+        class="form_button w-full py-4 font-bold shadow-lg shadow-blue-100"
+      >
+        Actualizar Pedido
+      </button>
+      <button type="button" (click)="goBack()" class="form_button-cancel w-full py-3">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
