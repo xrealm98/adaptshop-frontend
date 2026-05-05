@@ -12,10 +12,11 @@ import { OrdersService } from '../../core/services/order/orders.service';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { UserService } from '../../core/services/users/user.service';
 import { User } from '../../models/user.model';
+import { FormInputComponent } from '../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, CurrencyPipe],
+  imports: [ReactiveFormsModule, FormInputComponent, CurrencyPipe],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })

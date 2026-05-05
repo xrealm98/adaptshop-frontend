@@ -2,52 +2,74 @@
   <h1 class="text-3xl font-bold mb-8">Pago</h1>
 
   <form [formGroup]="form" (ngSubmit)="onPay()" class="grid md:grid-cols-2 gap-12">
-    <div class="space-y-4">
+    <div class="space-y-4 flex flex-col gap-2">
       <h2 class="text-xl font-semibold">Datos de envío</h2>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Nombre</label>
-        <input formControlName="first_name" class="form__input" />
-      </div>
+      <app-form-input
+        id="Nombre"
+        label="Nombre (*)"
+        type="text"
+        [control]="form.get('first_name')!"
+        [errorMessages]="{
+          required: 'El nombre es obligatorio',
+        }"
+      />
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Apellidos</label>
-        <input formControlName="last_name" class="form__input" />
-      </div>
+      <app-form-input
+        id="last_name"
+        label="Apellidos (*)"
+        type="text"
+        [control]="form.get('last_name')!"
+        [errorMessages]="{
+          required: 'Los apellidos son obligatorios',
+        }"
+      />
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+      <div class="flex flex-col gap-1">
+        <label for="email" class="form_label">Correo electrónico</label>
         <input
+          id="email"
           formControlName="email"
-          class="form__input form__input bg-gray-100 cursor-not-allowed"
+          class="form_input bg-gray-100 cursor-not-allowed text-gray-400"
+          aria-label="Correo electrónico (no editable)"
         />
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Dirección</label>
-        <input formControlName="shipping_street" class="form__input" />
+      <app-form-input
+        id="shipping_street"
+        label="Dirección (*)"
+        [control]="form.get('shipping_street')!"
+        [errorMessages]="{ required: 'La dirección es obligatoria' }"
+      />
+
+      <div class="grid grid-cols-2 gap-4">
+        <app-form-input
+          id="shipping_city"
+          label="Ciudad (*)"
+          [control]="form.get('shipping_city')!"
+          [errorMessages]="{ required: 'La ciudad es obligatoria' }"
+        />
+        <app-form-input
+          id="shipping_province"
+          label="Provincia (*)"
+          [control]="form.get('shipping_province')!"
+          [errorMessages]="{ required: 'La provincia es obligatoria' }"
+        />
       </div>
 
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Ciudad</label>
-          <input formControlName="shipping_city" class="form__input" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Provincia</label>
-          <input formControlName="shipping_province" class="form__input" />
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700">Código Postal</label>
-          <input formControlName="shipping_postal_code" class="form__input" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700">País</label>
-          <input formControlName="shipping_country" class="form__input" />
-        </div>
+        <app-form-input
+          id="shipping_postal_code"
+          label="Código Postal (*)"
+          [control]="form.get('shipping_postal_code')!"
+          [errorMessages]="{ required: 'El código postal es obligatorio' }"
+        />
+        <app-form-input
+          id="shipping_country"
+          label="País (*)"
+          [control]="form.get('shipping_country')!"
+          [errorMessages]="{ required: 'El país es obligatorio' }"
+        />
       </div>
 
       <div class="mt-4">
@@ -61,17 +83,18 @@
         </label>
       </div>
 
-      <h2 class="text-xl font-semibold mt-6">Método de pago</h2>
-      <div class="space-y-3 mt-4">
-        <label
-          class="flex items-center justify-between p-4 border rounded cursor-pointer hover:bg-gray-50"
-        >
-          <span class="font-medium">Tarjeta de crédito/débito</span>
-          <input type="radio" checked class="w-5 h-5 accent-black" />
-        </label>
+      <div>
+        <h2 class="text-xl font-semibold mt-2">Método de pago</h2>
+        <div class="space-y-3 mt-4">
+          <label
+            class="flex items-center justify-between p-4 border rounded cursor-pointer hover:bg-gray-50"
+          >
+            <span class="font-medium">Tarjeta de crédito/débito</span>
+            <input type="radio" checked class="w-5 h-5 accent-black" />
+          </label>
+        </div>
+        <div id="card-element" class="p-4 border rounded bg-white shadow-sm"></div>
       </div>
-
-      <div id="card-element" class="p-4 mt-4 border rounded bg-white shadow-sm"></div>
     </div>
 
     <div class="flex flex-col">

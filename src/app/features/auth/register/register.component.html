@@ -3,39 +3,59 @@
 
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 my-4">
     <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="form_label">Nombre</label>
-        <input formControlName="first_name" type="text" class="form_input" />
-      </div>
-      <div>
-        <label class="form_label">Apellidos</label>
-        <input formControlName="last_name" type="text" class="form_input" />
-      </div>
+      <app-form-input
+        label="Nombre (*)"
+        type="text"
+        [control]="registerForm.get('first_name')!"
+        [errorMessages]="{
+          required: 'El nombre es obligatorio',
+        }"
+      />
+
+      <app-form-input
+        label="Apellidos (*)"
+        type="text"
+        [control]="registerForm.get('last_name')!"
+        [errorMessages]="{
+          required: 'Los apellidos son obligatorios',
+        }"
+      />
     </div>
 
-    <div>
-      <label class="form_label">Correo electrónico</label>
-      <input formControlName="email" type="email" class="form_input" />
-      @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-        <span class="form_error">Email no válido</span>
-      }
-    </div>
+    <app-form-input
+      label="Correo electrónico (*)"
+      type="email"
+      [control]="registerForm.get('email')!"
+      [errorMessages]="{
+        required: 'El email es obligatorio',
+        email: 'Introduce un email válido',
+      }"
+    />
 
-    <div>
-      <label class="form_label">Contraseña</label>
-      <input formControlName="password" type="password" class="form_input" />
-    </div>
+    <app-form-input
+      label="Contraseña (*)"
+      type="password"
+      [control]="registerForm.get('password')!"
+      [errorMessages]="{
+        required: 'La contraseña es obligatoria',
+        minlength: 'Mínimo 6 caracteres',
+      }"
+    />
+    <app-form-input
+      label="Confirmar contraseña (*)"
+      type="password"
+      [control]="registerForm.get('password_confirmation')!"
+      [errorMessages]="{
+        required: 'Confirma tu contraseña',
+      }"
+    />
+    @if (
+      registerForm.hasError('passwordMismatch') &&
+      registerForm.get('password_confirmation')?.touched
+    ) {
+      <span class="form_error">Las contraseñas no coinciden</span>
+    }
 
-    <div>
-      <label class="form_label">Confirmar contraseña</label>
-      <input formControlName="password_confirmation" type="password" class="form_input" />
-      @if (
-        registerForm.hasError('passwordMismatch') &&
-        registerForm.get('password_confirmation')?.touched
-      ) {
-        <span class="form_error">Las contraseñas no coinciden</span>
-      }
-    </div>
     @if (errorMessage) {
       <span class="form_error">{{ errorMessage }}</span>
     }

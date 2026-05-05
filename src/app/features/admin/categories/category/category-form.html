@@ -23,20 +23,17 @@
 
   <div class="form">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-      <div>
-        <label class="form_label">Nombre de la categoría</label>
-        <input
-          formControlName="name"
-          type="text"
-          class="form_input"
-          placeholder="Ej: Ropa deportiva"
-        />
-        @if (form.get('name')?.invalid && form.get('name')?.touched) {
-          <span class="form_error"
-            >El nombre es obligatorio y debe tener al menos 2 caracteres</span
-          >
-        }
-      </div>
+      <app-form-input
+        id="name"
+        label="Nombre de la categoría (*)"
+        type="text"
+        placeholder="Ej: Ropa deportiva"
+        [control]="form.get('name')!"
+        [errorMessages]="{
+          required: 'El nombre es obligatorio',
+          minlength: 'Debe tener al menos 2 caracteres',
+        }"
+      />
 
       <div class="flex justify-end gap-3 mt-2">
         <button type="button" (click)="goBack()" class="form_button-cancel">Cancelar</button>

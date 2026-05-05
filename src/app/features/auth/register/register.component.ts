@@ -9,9 +9,10 @@ import {
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { FormInputComponent } from '../../../shared/components/form-controls/form-input/form-input.component';
 @Component({
   selector: 'app-register.component',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, FormInputComponent, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -36,6 +37,12 @@ export class RegisterComponent {
   constructor() {
     this.title.setTitle(`Registro`);
   }
+  ngOnInit() {
+    this.registerForm.valueChanges.subscribe(() => {
+      this.errorMessage = '';
+    });
+  }
+
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirm = control.get('password_confirmation');

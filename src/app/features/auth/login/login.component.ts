@@ -3,10 +3,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { FormInputComponent } from '../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
   selector: 'app-login.component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormInputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -24,6 +25,12 @@ export class LoginComponent {
 
   constructor() {
     this.title.setTitle(`Inicio de sesión`);
+  }
+
+  ngOnInit() {
+    this.loginForm.valueChanges.subscribe(() => {
+      this.errorMessage = '';
+    });
   }
 
   onSubmit() {
