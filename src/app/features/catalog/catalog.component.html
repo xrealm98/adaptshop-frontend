@@ -106,42 +106,12 @@
           }
         </div>
 
-        @if (totalPages() > 1) {
-          <div class="flex justify-center mt-12 border-t pt-6">
-            <nav class="flex items-center bg-gray-200 rounded-md overflow-hidden shadow-sm">
-              <button
-                (click)="goToPage(currentPage() - 1)"
-                [disabled]="currentPage() === 1"
-                class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
-              >
-                <span class="sr-only">Anterior</span>
-                &lt;
-              </button>
-
-              @for (page of visiblePages(); track page) {
-                <button
-                  (click)="goToPage(page)"
-                  class="px-4 py-2 text-sm font-medium transition min-w-11.25 cursor-pointer"
-                  [class.bg-blue-600]="currentPage() === page"
-                  [class.text-white]="currentPage() === page"
-                  [class.text-gray-700]="currentPage() !== page"
-                  [class.hover:bg-gray-300]="currentPage() !== page"
-                >
-                  {{ page }}
-                </button>
-              }
-
-              <button
-                (click)="goToPage(currentPage() + 1)"
-                [disabled]="currentPage() === totalPages()"
-                class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
-              >
-                <span class="sr-only">Siguiente</span>
-                &gt;
-              </button>
-            </nav>
-          </div>
-        }
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="goToPage($event)"
+        >
+        </app-pagination>
       } @else {
         <div class="py-20 text-center">
           <p class="text-gray-400 text-lg font-medium">No se encontraron productos.</p>

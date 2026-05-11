@@ -33,12 +33,12 @@ export class DashboardComponent {
       categories: this.categoryService.getCategories(),
     }).subscribe({
       next: (res) => {
-        const totalRevenue = res.orders.reduce((acc, order) => acc + Number(order.total), 0);
+        const totalRevenue = res.orders.data.reduce((acc, order) => acc + Number(order.total), 0);
         this.total.set({
-          orders: res.orders.length,
+          orders: res.orders.total,
           products: res.products.total,
-          users: res.users.length,
-          categories: res.categories.length,
+          users: res.users.total,
+          categories: res.categories.total,
           revenue: totalRevenue,
         });
       },

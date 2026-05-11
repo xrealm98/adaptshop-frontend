@@ -27,7 +27,7 @@ export class HeaderComponent {
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe({
+    this.categoryService.getAllCategories().subscribe({
       next: (categories) => this.categories.set(categories.slice(0, 6)),
     });
   }

@@ -38,7 +38,7 @@ export class HomeComponent {
   }
 
   loadFeaturedCategory() {
-    this.categoryService.getCategories().subscribe({
+    this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
         if (categories.length > 0) {
           const first = categories[0];
@@ -52,7 +52,7 @@ export class HomeComponent {
   }
 
   loadCategoriesSection() {
-    this.categoryService.getCategories().subscribe((cats) => {
+    this.categoryService.getAllCategories().subscribe((cats) => {
       this.categories.set(cats.slice(0, 4));
     });
   }

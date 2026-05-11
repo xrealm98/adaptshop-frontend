@@ -62,7 +62,7 @@ export class ProductForm {
 
   loadCategories() {
     this.categoryService.getCategories().subscribe({
-      next: (categories) => this.categories.set(categories),
+      next: (categories) => this.categories.set(categories.data),
       error: (err) => console.error(err),
     });
   }
