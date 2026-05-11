@@ -5,10 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { UserService } from '../../../../core/services/users/user.service';
 import { User } from '../../../../models/user.model';
+import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
   selector: 'app-info.component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormInputComponent],
   templateUrl: './info.component.html',
   styleUrl: './info.component.scss',
 })

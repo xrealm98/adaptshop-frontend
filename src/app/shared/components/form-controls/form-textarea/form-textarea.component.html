@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-1">
+  <label [for]="id" class="form_label">{{ label }}</label>
+  <textarea
+    [id]="id"
+    [formControl]="$any(control)"
+    [placeholder]="placeholder"
+    [rows]="rows"
+    class="form_input"
+    [class.border-red-500]="control.invalid && control.touched"
+    [class.border-green-500]="control.valid && control.touched"
+    [attr.aria-label]="label"
+    [attr.aria-invalid]="control.invalid && control.touched"
+    [attr.aria-describedby]="id + '-error'"
+  ></textarea>
+  @for (error of errors; track error) {
+    <span [id]="id + '-error'" class="form_error" role="alert">{{ error }}</span>
+  }
+</div>

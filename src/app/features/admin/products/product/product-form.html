@@ -25,84 +25,87 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2">
-          <label class="form_label">Nombre</label>
-          <input
-            formControlName="name"
+          <app-form-input
+            id="name"
+            label="Nombre (*)"
             type="text"
-            class="form_input"
             placeholder="Nombre del producto"
+            [control]="form.get('name')!"
+            [errorMessages]="{
+              required: 'El nombre es obligatorio',
+            }"
           />
-          @if (form.get('name')?.invalid && form.get('name')?.touched) {
-            <span class="form_error">El nombre es obligatorio</span>
-          }
         </div>
 
         <div class="col-span-2">
-          <label class="form_label">Detalles del producto</label>
-          <textarea
-            formControlName="details"
-            class="form_input"
-            rows="5"
+          <app-form-textarea
+            id="details"
+            label="Detalles del producto"
+            [rows]="5"
             placeholder="Breve resumen para el detalle del producto (máx. 500 caracteres)"
-          ></textarea>
-          @if (form.get('details')?.errors?.['maxlength']) {
-            <span class="form_error">El resumen no puede superar los 500 caracteres</span>
-          }
+            [control]="form.get('details')!"
+            [errorMessages]="{
+              maxlength: 'El resumen no puede superar los 500 caracteres',
+            }"
+          />
         </div>
 
         <div class="col-span-2">
-          <label class="form_label">Descripción completa</label>
-          <textarea
-            formControlName="description"
-            class="form_input"
-            rows="5"
+          <app-form-textarea
+            id="description"
+            label="Descripción completa"
+            [rows]="5"
             placeholder="Descripción extensa del producto"
-          ></textarea>
-          @if (form.get('description')?.invalid && form.get('description')?.touched) {
-            <span class="form_error">La descripción es obligatoria</span>
-          }
-        </div>
-
-        <div>
-          <label class="form_label">Categoría</label>
-          <select formControlName="category_id" class="form_input">
-            <option value="0" disabled>Selecciona una categoría</option>
-            @for (category of categories(); track category.id) {
-              <option [value]="category.id">{{ category.name }}</option>
-            }
-          </select>
-          @if (form.get('category_id')?.invalid && form.get('category_id')?.touched) {
-            <span class="form_error">Selecciona una categoría</span>
-          }
-        </div>
-
-        <div>
-          <label class="form_label">Precio (€)</label>
-          <input
-            formControlName="price"
-            type="number"
-            min="0"
-            step="0.01"
-            class="form_input"
-            placeholder="0.00"
+            [control]="form.get('description')!"
+            [errorMessages]="{
+              required: 'La descripción es obligatoria',
+            }"
           />
-          @if (form.get('price')?.invalid && form.get('price')?.touched) {
-            <span class="form_error">El precio es obligatorio y debe ser mayor o igual a 0</span>
-          }
         </div>
 
-        <div>
-          <label class="form_label">Stock</label>
-          <input formControlName="stock" type="number" min="0" class="form_input" placeholder="0" />
-          @if (form.get('stock')?.invalid && form.get('stock')?.touched) {
-            <span class="form_error">El stock es obligatorio y debe ser mayor o igual a 0</span>
+        <app-form-select
+          id="category_id"
+          label="Categoría"
+          [control]="form.get('category_id')!"
+          [errorMessages]="{ required: 'Selecciona una categoría' }"
+        >
+          <option value="0" disabled>Selecciona una categoría</option>
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
           }
-        </div>
+        </app-form-select>
 
-        <div>
-          <label class="form_label">URL imagen</label>
-          <input formControlName="image" type="text" class="form_input" placeholder="https://..." />
-        </div>
+        <app-form-input
+          id="price"
+          label="Precio(€) (*)"
+          type="number"
+          placeholder="0.00"
+          [control]="form.get('price')!"
+          [errorMessages]="{
+            required: 'El precio es obligatorio',
+            min: 'Debe ser mayor o igual a 0',
+          }"
+        />
+
+        <app-form-input
+          id="stock"
+          label="Stock (*)"
+          type="number"
+          placeholder="0"
+          [control]="form.get('stock')!"
+          [errorMessages]="{
+            required: 'El stock es obligatorio',
+            min: 'Debe ser mayor o igual a 0',
+          }"
+        />
+
+        <app-form-input
+          id="image"
+          label="URL imagen"
+          type="text"
+          placeholder="https://..."
+          [control]="form.get('image')!"
+        />
 
         <div class="col-span-2 flex items-center gap-3">
           <input

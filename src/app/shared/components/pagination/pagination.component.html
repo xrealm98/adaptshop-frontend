@@ -1,0 +1,39 @@
+@if (totalPages() > 1) {
+  <div class="flex justify-center mt-6 border-t pt-6">
+    <nav class="flex items-center bg-gray-200 rounded-md overflow-hidden shadow-sm">
+      <!-- Anterior -->
+      <button
+        (click)="goToPage(currentPage() - 1)"
+        [disabled]="currentPage() === 1"
+        class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
+      >
+        <span class="sr-only">Anterior</span>
+        &lt;
+      </button>
+
+      <!-- Números de página -->
+      @for (page of visiblePages(); track page) {
+        <button
+          (click)="goToPage(page)"
+          class="px-4 py-2 text-sm font-medium transition min-w-11.25 cursor-pointer"
+          [class.bg-blue-600]="currentPage() === page"
+          [class.text-white]="currentPage() === page"
+          [class.text-gray-700]="currentPage() !== page"
+          [class.hover:bg-gray-300]="currentPage() !== page"
+        >
+          {{ page }}
+        </button>
+      }
+
+      <!-- Siguiente -->
+      <button
+        (click)="goToPage(currentPage() + 1)"
+        [disabled]="currentPage() === totalPages()"
+        class="px-4 py-2 text-gray-600 hover:bg-gray-300 disabled:opacity-30 disabled:hover:bg-transparent transition cursor-pointer"
+      >
+        <span class="sr-only">Siguiente</span>
+        &gt;
+      </button>
+    </nav>
+  </div>
+}

@@ -1,0 +1,45 @@
+<div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
+  <table class="w-full text-sm text-left text-gray-500 border-collapse" role="table">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200">
+      <tr>
+        @for (col of columns; track col.key) {
+          <th
+            class="px-6 py-3 border-r border-gray-200"
+            [class.cursor-pointer]="col.sortable"
+            [class.select-none]="col.sortable"
+            [class.hover:bg-gray-200]="col.sortable"
+            (click)="sort(col)"
+            [attr.aria-sort]="sortColumn() === col.key ? sortDirection() : 'none'"
+          >
+            <div class="flex items-center gap-1">
+              {{ col.header }}
+              @if (col.sortable) {
+                <span class="text-gray-400 text-xs">{{ getSortIcon(col.key) }}</span>
+              }
+            </div>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @if (sortedData().length > 0) {
+        @for (row of sortedData(); track row.id) {
+          <tr class="bg-white border-b border-gray-200 hover:bg-blue-50 transition-colors">
+            <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: row }" />
+            @if (actionsTemplate) {
+              <td class="px-6 py-4 flex justify-center gap-4">
+                <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row }" />
+              </td>
+            }
+          </tr>
+        }
+      } @else {
+        <tr>
+          <td [attr.colspan]="columns.length" class="text-center py-10 text-gray-400 bg-gray-50">
+            {{ emptyMessage }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

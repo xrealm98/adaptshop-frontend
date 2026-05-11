@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../../../core/services/categories/category.service';
+import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
   selector: 'app-category-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormInputComponent],
   templateUrl: './category-form.html',
   styleUrl: './category-form.scss',
 })

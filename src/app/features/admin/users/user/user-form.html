@@ -28,27 +28,40 @@
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
         <h3 class="text-lg font-bold mb-5 text-gray-700">Información Personal</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label class="form_label">Nombre (*)</label>
-            <input formControlName="first_name" type="text" class="form_input" />
-            @if (isFieldInvalid('first_name')) {
-              <p class="form_error">El nombre es obligatorio.</p>
-            }
-          </div>
-          <div>
-            <label class="form_label">Apellido (*)</label>
-            <input formControlName="last_name" type="text" class="form_input" />
-            @if (isFieldInvalid('last_name')) {
-              <p class="form_error">El apellido es obligatorio.</p>
-            }
+          <app-form-input
+            id="first_name"
+            label="Nombre (*)"
+            type="text"
+            [control]="form.get('first_name')!"
+            [errorMessages]="{
+              required: 'El nombre es obligatorio',
+            }"
+          />
+          <app-form-input
+            id="last_name"
+            label="Apellido (*)"
+            type="text"
+            [control]="form.get('last_name')!"
+            [errorMessages]="{
+              required: 'El apellido es obligatorio',
+            }"
+          />
+
+          <div class="md:col-span-2">
+            <app-form-input
+              id="email"
+              label="Email (Solo lectura)"
+              type="email"
+              [control]="form.get('email')!"
+            />
           </div>
           <div class="md:col-span-2">
-            <label class="form_label">Email (Solo lectura)</label>
-            <input formControlName="email" type="email" class="form_input bg-gray-50" />
-          </div>
-          <div>
-            <label class="form_label">Teléfono</label>
-            <input formControlName="phone" type="text" class="form_input" />
+            <app-form-input
+              id="phone"
+              label="Teléfono"
+              type="text"
+              [control]="form.get('phone')!"
+            />
           </div>
         </div>
       </div>
@@ -57,21 +70,21 @@
         <h3 class="text-lg font-bold mb-5 text-gray-700">Dirección</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div class="md:col-span-2">
-            <label class="form_label">Calle</label>
-            <input formControlName="street" type="text" class="form_input" />
+            <app-form-input id="street" label="Calle" type="text" [control]="form.get('street')!" />
           </div>
-          <div>
-            <label class="form_label">Ciudad</label>
-            <input formControlName="city" type="text" class="form_input" />
-          </div>
-          <div>
-            <label class="form_label">Provincia</label>
-            <input formControlName="province" type="text" class="form_input" />
-          </div>
-          <div>
-            <label class="form_label">Código Postal</label>
-            <input formControlName="postal_code" type="text" class="form_input" />
-          </div>
+          <app-form-input id="city" label="Ciudad" type="text" [control]="form.get('city')!" />
+          <app-form-input
+            id="province"
+            label="Provincia"
+            type="text"
+            [control]="form.get('province')!"
+          />
+          <app-form-input
+            id="postal_code"
+            label="Código Postal"
+            type="text"
+            [control]="form.get('postal_code')!"
+          />
         </div>
       </div>
     </div>
@@ -79,13 +92,16 @@
     <div class="flex flex-col gap-6">
       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
         <h3 class="text-lg font-bold mb-5 text-gray-700">Ajustes</h3>
-
         <div class="mb-6">
-          <label class="form_label">Rol</label>
-          <select formControlName="role" class="form_input">
+          <app-form-select
+            id="role"
+            label="Rol"
+            [control]="form.get('role')!"
+            [errorMessages]="{ required: 'Selecciona un rol' }"
+          >
             <option value="client">Cliente</option>
             <option value="admin">Administrador</option>
-          </select>
+          </app-form-select>
         </div>
 
         <div class="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100">

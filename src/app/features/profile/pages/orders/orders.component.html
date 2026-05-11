@@ -108,4 +108,9 @@
       </div>
     }
   </div>
+  <app-pagination
+    [currentPage]="currentPage()"
+    [totalPages]="totalPages()"
+    (pageChange)="onPageChange($event)"
+  />
 </section>

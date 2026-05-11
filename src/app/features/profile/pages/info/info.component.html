@@ -31,47 +31,32 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="input-group">
-        <label class="form_label">Nombre</label>
-        <input
-          formControlName="first_name"
-          [readonly]="!isEditing()"
-          class="form_input"
-          [class.form__input-readonly]="!isEditing()"
-          placeholder="Tu nombre"
-        />
-        @if (isFieldInvalid('first_name')) {
-          <span class="form_error">El nombre es obligatorio</span>
-        }
-      </div>
+      <app-form-input
+        id="first_name"
+        label="Nombre"
+        [control]="form.get('first_name')!"
+        [readonly]="!isEditing()"
+        placeholder="Tu nombre"
+        [errorMessages]="{ required: 'El nombre es obligatorio' }"
+      />
+      <app-form-input
+        id="last_name"
+        label="Apellido"
+        [control]="form.get('last_name')!"
+        [readonly]="!isEditing()"
+        placeholder="Tu apellido"
+        [errorMessages]="{ required: 'El apellido es obligatorio' }"
+      />
+      <app-form-input
+        id="phone"
+        label="Teléfono"
+        [control]="form.get('phone')!"
+        [readonly]="!isEditing()"
+        placeholder="Tu teléfono"
+      />
 
       <div class="input-group">
-        <label class="form_label">Apellido</label>
-        <input
-          formControlName="last_name"
-          [readonly]="!isEditing()"
-          class="form_input"
-          [class.form__input-readonly]="!isEditing()"
-          placeholder="Tu apellido"
-        />
-        @if (isFieldInvalid('last_name')) {
-          <span class="form_error">El apellido es obligatorio</span>
-        }
-      </div>
-
-      <div class="input-group">
-        <label class="form_label">Teléfono</label>
-        <input
-          formControlName="phone"
-          [readonly]="!isEditing()"
-          class="form_input"
-          [class.form__input-readonly]="!isEditing()"
-          placeholder="Tu teléfono"
-        />
-      </div>
-
-      <div class="input-group">
-        <label class="form_label">Correo Electrónico</label>
+        <label class="form_label" for="email">Correo Electrónico</label>
         <div class="relative">
           <input
             formControlName="email"
@@ -100,59 +85,43 @@
       <h3 class="text-lg font-bold text-gray-800 mb-6">Dirección de envío</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="input-group md:col-span-2">
-          <label class="form_label">Calle y número</label>
-          <input
-            formControlName="street"
+          <app-form-input
+            id="street"
+            label="Calle y número"
+            [control]="form.get('street')!"
             [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
             placeholder="Ej. Calle Mayor 1, Puerta 2"
           />
         </div>
 
-        <div class="input-group">
-          <label class="form_label">Provincia</label>
-          <input
-            formControlName="province"
-            [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
-            placeholder="Provincia"
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="form_label">Ciudad</label>
-          <input
-            formControlName="city"
-            [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
-            placeholder="Ciudad"
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="form_label">País</label>
-          <input
-            formControlName="country"
-            [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
-            placeholder="País"
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="form_label">Código Postal</label>
-          <input
-            formControlName="postal_code"
-            [readonly]="!isEditing()"
-            class="form_input"
-            [class.form__input-readonly]="!isEditing()"
-            placeholder="Código Postal"
-          />
-        </div>
+        <app-form-input
+          id="province"
+          label="Provincia"
+          [control]="form.get('province')!"
+          [readonly]="!isEditing()"
+          placeholder="Provincia"
+        />
+        <app-form-input
+          id="city"
+          label="Ciudad"
+          [control]="form.get('city')!"
+          [readonly]="!isEditing()"
+          placeholder="Ciudad"
+        />
+        <app-form-input
+          id="country"
+          label="País"
+          [control]="form.get('country')!"
+          [readonly]="!isEditing()"
+          placeholder="País"
+        />
+        <app-form-input
+          id="postal_code"
+          label="Código Postal"
+          [control]="form.get('postal_code')!"
+          [readonly]="!isEditing()"
+          placeholder="Código Postal"
+        />
       </div>
     </div>
 

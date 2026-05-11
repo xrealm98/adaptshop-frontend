@@ -4,10 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../../../core/services/categories/category.service';
 import { ProductService } from '../../../../core/services/products/product.service';
 import { Category } from '../../../../models/category.model';
+import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
+import { FormSelectComponent } from '../../../../shared/components/form-controls/form-select/form-select.component';
+import { FormTextareaComponent } from '../../../../shared/components/form-controls/form-textarea/form-textarea.component';
 
 @Component({
   selector: 'app-product-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormInputComponent, FormTextareaComponent, FormSelectComponent],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
 })
@@ -59,7 +62,7 @@ export class ProductForm {
 
   loadCategories() {
     this.categoryService.getCategories().subscribe({
-      next: (categories) => this.categories.set(categories),
+      next: (categories) => this.categories.set(categories.data),
       error: (err) => console.error(err),
     });
   }

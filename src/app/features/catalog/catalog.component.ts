@@ -3,16 +3,16 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../core/services/categories/category.service';
 import { ProductService } from '../../core/services/products/product.service';
-import { calculateVisiblePages } from '../../core/utils/pagination.util';
 import { Breadcrumb } from '../../models/breadcrumb.model';
 import { Category } from '../../models/category.model';
 import { Product } from '../../models/product.model';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
+import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 
 @Component({
   selector: 'app-catalog',
-  imports: [ProductCardComponent, BreadcrumbComponent],
+  imports: [ProductCardComponent, BreadcrumbComponent, PaginationComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss',
 })
@@ -37,12 +37,6 @@ export class CatalogComponent {
   currentPage = signal<number>(1);
   totalPages = signal<number>(1);
 
-  visiblePages = computed(() => {
-    const current = this.currentPage();
-    const total = this.totalPages();
-
-    return calculateVisiblePages(current, total);
-  });
   selectedCategoryName = computed(() => {
     const id = this.filterSelectedCategory();
     if (!id) return null;
@@ -73,7 +67,7 @@ export class CatalogComponent {
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe({
+    this.categoryService.getAllCategories().subscribe({
       next: (categories) => this.categories.set(categories),
     });
   }
