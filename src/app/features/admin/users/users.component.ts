@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../core/services/users/user.service';
 import { User } from '../../../models/user.model';
@@ -28,24 +28,14 @@ export class UsersComponent {
   users = signal<User[]>([]);
   searchTerm = signal('');
 
-  filteredUsers = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) return this.users();
-    return this.users().filter(
-      (u) =>
-        u.first_name.toLowerCase().includes(term) ||
-        u.last_name.toLowerCase().includes(term) ||
-        u.role?.toLowerCase().includes(term) ||
-        u.email.toLowerCase().includes(term),
-    );
-  });
-
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    this.userService.getUsers({ page: this.currentPage(), per_page: 10 }).subscribe({
+    const params: any = { page: this.currentPage(), per_page: 10 };
+    if (this.searchTerm()) params.search = this.searchTerm();
+    this.userService.getUsers(params).subscribe({
       next: (users) => {
         this.users.set(users.data);
         this.totalPages.set(users.last_page);
@@ -57,6 +47,7 @@ export class UsersComponent {
   onSearch(value: string) {
     this.searchTerm.set(value);
     this.currentPage.set(1);
+    this.loadUsers();
   }
 
   deleteUser(id: number) {

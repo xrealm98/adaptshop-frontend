@@ -3,7 +3,7 @@
   (onSearch)="onSearch($event)"
 />
 
-<app-table [columns]="columns" [data]="filteredOrders()" emptyMessage="No se encontraron pedidos.">
+<app-table [columns]="columns" [data]="orders()" emptyMessage="No se encontraron pedidos.">
   <ng-template #rowTemplate let-order>
     @let status = getStatusInfo(order.status);
 

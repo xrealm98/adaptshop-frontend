@@ -5,11 +5,7 @@
   (onAdd)="goToCreate()"
 />
 
-<app-table
-  [columns]="columns"
-  [data]="filteredProducts()"
-  emptyMessage="No hay productos disponibles."
->
+<app-table [columns]="columns" [data]="products()" emptyMessage="No hay productos disponibles.">
   <ng-template #rowTemplate let-product>
     <td class="px-6 py-4 border-r border-gray-200">
       @if (product.image) {

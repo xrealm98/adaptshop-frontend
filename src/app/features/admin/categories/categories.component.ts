@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CategoryService } from '../../../core/services/categories/category.service';
 import { Category } from '../../../models/category.model';
@@ -28,17 +28,13 @@ export class CategoriesComponent {
     { key: 'actions', header: 'Acciones', sortable: false },
   ];
 
-  filteredCategories = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) return this.categories();
-    return this.categories().filter((c) => c.name.toLowerCase().includes(term));
-  });
-
   ngOnInit() {
     this.loadCategories();
   }
   loadCategories() {
-    this.categoryService.getCategories({ page: this.currentPage(), per_page: 10 }).subscribe({
+    const params: any = { page: this.currentPage(), per_page: 10 };
+    if (this.searchTerm()) params.search = this.searchTerm();
+    this.categoryService.getCategories(params).subscribe({
       next: (res) => {
         this.categories.set(res.data);
         this.totalPages.set(res.last_page);
@@ -52,6 +48,7 @@ export class CategoriesComponent {
   onSearch(value: string) {
     this.searchTerm.set(value);
     this.currentPage.set(1);
+    this.loadCategories();
   }
 
   onPageChange(page: number) {

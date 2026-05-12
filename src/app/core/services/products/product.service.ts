@@ -1,8 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Product } from '../../../models/product.model';
+import { buildHttpParams } from '../../utils/api.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +12,9 @@ export class ProductService {
   private http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  getProducts(filters: any = {}): Observable<any> {
-    let params = new HttpParams();
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        params = params.set(key, value.toString());
-      }
-    });
-
-    return this.http.get<any>(`${this.baseUrl}/products`, { params });
+  getProducts(params: any = {}): Observable<any> {
+    const httpParams = buildHttpParams(params);
+    return this.http.get<any>(`${this.baseUrl}/products`, { params: httpParams });
   }
 
   processCollection(res: any, sortBy: string) {

@@ -5,11 +5,7 @@
   (onAdd)="goToCreate()"
 />
 
-<app-table
-  [columns]="columns"
-  [data]="filteredCategories()"
-  emptyMessage="No hay categorías disponibles."
->
+<app-table [columns]="columns" [data]="categories()" emptyMessage="No hay categorías disponibles.">
   <ng-template #rowTemplate let-category>
     <td class="px-6 py-4 border-r border-gray-200 font-medium text-gray-900">{{ category.id }}</td>
     <td class="px-6 py-4 border-r border-gray-200 font-semibold">{{ category.name }}</td>
