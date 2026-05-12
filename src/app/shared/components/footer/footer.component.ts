@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SiteSettingsService } from '../../../core/services/settings/site-settings.service';
 
 @Component({
   selector: 'app-footer',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })
-export class FooterComponent {}
+export class FooterComponent {
+  settingsService = inject(SiteSettingsService);
+}

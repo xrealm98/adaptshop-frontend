@@ -1,0 +1,94 @@
+<div class="max-w-lg">
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">Configuración del sitio</h2>
+
+  <div class="flex border-b border-gray-200 mb-6">
+    <button
+      type="button"
+      (click)="activeTab.set('site')"
+      class="px-4 py-2 text-sm font-medium border-b-2 transition cursor-pointer"
+      [class.border-blue-600]="activeTab() === 'site'"
+      [class.text-blue-600]="activeTab() === 'site'"
+      [class.border-transparent]="activeTab() !== 'site'"
+      [class.text-gray-500]="activeTab() !== 'site'"
+    >
+      Sitio
+    </button>
+    <button
+      type="button"
+      (click)="activeTab.set('footer')"
+      class="px-4 py-2 text-sm font-medium border-b-2 transition cursor-pointer"
+      [class.border-blue-600]="activeTab() === 'footer'"
+      [class.text-blue-600]="activeTab() === 'footer'"
+      [class.border-transparent]="activeTab() !== 'footer'"
+      [class.text-gray-500]="activeTab() !== 'footer'"
+    >
+      Footer
+    </button>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    @if (activeTab() === 'site') {
+      <form [formGroup]="siteForm" (ngSubmit)="onSubmitSite()" class="flex flex-col gap-4">
+        <app-form-input
+          id="name"
+          label="Nombre del sitio"
+          [control]="siteForm.get('name')!"
+          [errorMessages]="{ required: 'El nombre es obligatorio' }"
+        />
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" [disabled]="siteForm.invalid" class="form_button w-auto">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (activeTab() === 'footer') {
+      <form [formGroup]="footerForm" (ngSubmit)="onSubmitFooter()" class="flex flex-col gap-4">
+        <app-form-input
+          id="phone"
+          label="Teléfono"
+          [control]="footerForm.get('phone')!"
+          [errorMessages]="{ required: 'El teléfono es obligatorio' }"
+        />
+        <app-form-input
+          id="email"
+          label="Email de contacto"
+          type="email"
+          [control]="footerForm.get('email')!"
+          [errorMessages]="{
+            required: 'El email es obligatorio',
+            email: 'Introduce un email válido',
+          }"
+        />
+        <app-form-input
+          id="faq_url"
+          label="URL Preguntas frecuentes"
+          [control]="footerForm.get('faq_url')!"
+        />
+        <app-form-input
+          id="about_url"
+          label="URL Quiénes somos"
+          [control]="footerForm.get('about_url')!"
+        />
+        <app-form-input
+          id="legal_url"
+          label="URL Aviso legal"
+          [control]="footerForm.get('legal_url')!"
+        />
+        <app-form-input
+          id="privacy_url"
+          label="URL Política de privacidad"
+          [control]="footerForm.get('privacy_url')!"
+        />
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" [disabled]="footerForm.invalid" class="form_button w-auto">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { CategoryService } from '../../../core/services/categories/category.service';
+import { SiteSettingsService } from '../../../core/services/settings/site-settings.service';
 import { Category } from '../../../models/category.model';
 
 @Component({
@@ -14,6 +15,7 @@ import { Category } from '../../../models/category.model';
 export class HeaderComponent {
   public authService = inject(AuthService);
   cartService = inject(CartService);
+  siteConfig = inject(SiteSettingsService);
   public router = inject(Router);
   private categoryService = inject(CategoryService);
   private eRef = inject(ElementRef);

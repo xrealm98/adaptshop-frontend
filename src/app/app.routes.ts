@@ -138,6 +138,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/users/user/user-form').then((m) => m.UserForm),
       },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/admin/settings/site-settings.component').then(
+            (m) => m.SiteSettingsComponent,
+          ),
+      },
     ],
   },
   {
