@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { FormInputComponent } from '../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
@@ -14,6 +15,7 @@ import { FormInputComponent } from '../../../shared/components/form-controls/for
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   private title = inject(Title);
   errorMessage = '';
@@ -38,9 +40,11 @@ export class LoginComponent {
       const credentials = this.loginForm.getRawValue();
       this.authService.login(credentials).subscribe({
         next: () => {
+          this.notificationService.showInfo('Sesión iniciada. Bienvenido.');
           this.router.navigate(['/']);
         },
         error: () => {
+          this.notificationService.showError('Credenciales incorrectas. Inténtalo de nuevo.');
           this.errorMessage = 'Credenciales incorrectas';
         },
       });

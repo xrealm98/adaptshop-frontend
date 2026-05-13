@@ -1,21 +1,6 @@
 <div
   class="group relative bg-white rounded-2xl border border-black-100 p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full"
 >
-  <!-- Botón favoritos. Se implementará en un futuro.
-  <button
-    class="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm"
-  >
-    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-      />
-    </svg>
-  </button>
-  -->
-
   <div
     class="relative aspect-square overflow-hidden rounded-xl mb-5 bg-gray-50 flex items-center justify-center"
   >
@@ -56,7 +41,7 @@
       <button
         (click)="decrease()"
         [disabled]="itemQuantity() === 0"
-        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+        class="flex-1 h-11 flex items-center justify-center bg-green-600 text-white hover:bg-green-500 transition-colors cursor-pointer"
       >
         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4" />
@@ -67,8 +52,13 @@
 
       <button
         (click)="addItemToCart()"
-        [disabled]="itemQuantity() >= product.stock"
-        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+        [disabled]="isMaxStockReached()"
+        [class]="
+          isMaxStockReached()
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            : 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
+        "
+        class="flex-1 h-11 flex items-center justify-center transition-colors"
       >
         <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -80,5 +70,10 @@
         </svg>
       </button>
     </div>
+    @if (isMaxStockReached()) {
+      <p class="text-[10px] text-orange-600 font-bold text-center animate-pulse">
+        ¡Stock máximo alcanzado!
+      </p>
+    }
   </div>
 </div>

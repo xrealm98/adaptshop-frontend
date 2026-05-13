@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { UserService } from '../../../core/services/users/user.service';
 import { User } from '../../../models/user.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -14,6 +15,7 @@ import { TableComponent } from '../components/table/table.component';
 })
 export class UsersComponent {
   private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   currentPage = signal<number>(1);
   totalPages = signal<number>(1);
@@ -54,16 +56,23 @@ export class UsersComponent {
     if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
       this.userService.deleteUser(id).subscribe({
         next: () => {
-          this.users.update((prev) => prev.filter((u) => u.id !== id));
+          this.currentPage.set(1);
+          this.loadUsers();
+          this.notificationService.showInfo(`Usuario eliminado correctamente.`);
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          this.notificationService.showError(`Error al eliminar el usuario.`);
+          console.error(err);
+        },
       });
     }
   }
   toggleBlock(user: User) {
     this.userService.updateUser(user.id!, { is_blocked: !user.is_blocked }).subscribe({
       next: (updated) => {
-        this.users.update((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
+        this.currentPage.set(1);
+        this.loadUsers();
+        this.notificationService.showInfo(`Estado del usuario modificado correctamente.`);
       },
       error: (err) => console.error(err),
     });

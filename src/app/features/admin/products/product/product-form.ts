@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../../../core/services/categories/category.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { ProductService } from '../../../../core/services/products/product.service';
 import { Category } from '../../../../models/category.model';
 import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
@@ -18,6 +19,7 @@ export class ProductForm {
   private fb = inject(FormBuilder);
   private productService = inject(ProductService);
   private categoryService = inject(CategoryService);
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -73,13 +75,25 @@ export class ProductForm {
 
     if (this.isEditMode) {
       this.productService.updateProduct(this.productId!, data).subscribe({
-        next: () => this.router.navigate(['/admin/products']),
-        error: (err) => console.error(err),
+        next: () => {
+          this.router.navigate(['/admin/products']);
+          this.notificationService.showSuccess(`Producto actualizado correctamente.`);
+        },
+        error: (err) => {
+          this.notificationService.showError(`Error al actualizar el producto.`);
+          console.error(err);
+        },
       });
     } else {
       this.productService.createProduct(data).subscribe({
-        next: () => this.router.navigate(['/admin/products']),
-        error: (err) => console.error(err),
+        next: () => {
+          this.notificationService.showSuccess(`Producto creado correctamente.`);
+          this.router.navigate(['/admin/products']);
+        },
+        error: (err) => {
+          this.notificationService.showError(`Error al crear el producto.`);
+          console.error(err);
+        },
       });
     }
   }

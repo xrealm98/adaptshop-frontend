@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { CartService } from '../../../../core/services/cart/cart.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { ProductService } from '../../../../core/services/products/product.service';
 import { Breadcrumb } from '../../../../models/breadcrumb.model';
 import { Product } from '../../../../models/product.model';
@@ -19,6 +20,7 @@ export class ProductDetailComponent {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private notificationService = inject(NotificationService);
   private title = inject(Title);
 
   product = signal<Product | null>(null);
@@ -107,6 +109,7 @@ export class ProductDetailComponent {
         this.cartService.updateQuantity(p.id, this.quantity());
       }
     }
+    this.notificationService.showSuccess('Carrito actualizado correctamente');
     this.cartService.openSidebar();
   }
 }

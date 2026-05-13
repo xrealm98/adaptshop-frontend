@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { ProductService } from '../../../core/services/products/product.service';
 import { Product } from '../../../models/product.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -13,6 +14,7 @@ import { TableComponent } from '../components/table/table.component';
 })
 export class ProductsComponent {
   private productService = inject(ProductService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   products = signal<Product[]>([]);
   searchTerm = signal('');
@@ -58,7 +60,9 @@ export class ProductsComponent {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       this.productService.deleteProduct(id).subscribe({
         next: () => {
-          this.products.update((prev) => prev.filter((p) => p.id !== id));
+          this.currentPage.set(1);
+          this.loadProducts();
+          this.notificationService.showInfo(`Producto eliminado correctamente.`);
         },
       });
     }

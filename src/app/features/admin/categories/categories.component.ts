@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CategoryService } from '../../../core/services/categories/category.service';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { Category } from '../../../models/category.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import { TableHeader } from '../components/table-header/table-header';
@@ -15,6 +16,7 @@ import { TableComponent } from '../components/table/table.component';
 })
 export class CategoriesComponent {
   private categoryService = inject(CategoryService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   categories = signal<Category[]>([]);
   searchTerm = signal('');
@@ -60,6 +62,8 @@ export class CategoriesComponent {
     if (confirm('¿Estás seguro?')) {
       this.categoryService.deleteCategory(id).subscribe({
         next: () => {
+          this.notificationService.showInfo('Categoría eliminada correctamente');
+          this.currentPage.set(1);
           this.loadCategories();
         },
       });

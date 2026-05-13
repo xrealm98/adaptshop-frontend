@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { UserService } from '../../../../core/services/users/user.service';
 import { User } from '../../../../models/user.model';
 import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
@@ -17,6 +18,7 @@ export class InfoComponent {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   public authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private title = inject(Title);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -74,8 +76,10 @@ export class InfoComponent {
       next: (updatedUser) => {
         this.isEditing.set(false);
         this.authService.updateCurrentUser(updatedUser);
+        this.notificationService.showSuccess(`Perfil actualizado correctamente.`);
       },
       error: (err) => {
+        this.notificationService.showError(`Error al actualizar el perfil. Vuelve a intentarlo.`);
         console.error('Error al actualizar el perfil', err);
       },
     });
