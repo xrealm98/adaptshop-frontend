@@ -22,7 +22,10 @@ export class HeaderComponent {
 
   categories = signal<Category[]>([]);
   searchTerm = signal('');
-  isMenuOpen = signal(false);
+  isProfileMenuOpen = signal(false);
+
+  isMobileMenuOpen = signal(false);
+  isSearchOpen = signal(false);
 
   ngOnInit() {
     this.loadCategories();
@@ -45,14 +48,22 @@ export class HeaderComponent {
   }
 
   toggleMenu() {
-    this.isMenuOpen.update((isMenuOpen) => !isMenuOpen);
+    this.isProfileMenuOpen.update((isProfileMenuOpen) => !isProfileMenuOpen);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update((v) => !v);
+  }
+
+  toggleSearch() {
+    this.isSearchOpen.update((v) => !v);
   }
 
   // Cerrar el desplegable del perfil
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      this.isMenuOpen.set(false);
+      this.isProfileMenuOpen.set(false);
     }
   }
 

@@ -1,0 +1,10 @@
+@use 'tailwindcss';
+.nav__link {
+  @apply px-6 py-4 hover:text-blue-600 hover:bg-gray-100 cursor-pointer transition-colors;
+}
+.nav__link--active {
+  @apply font-bold underline;
+}
+.header__search {
+  @apply w-full h-12 pl-12 pr-4 bg-white rounded-full border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-200 focus:outline-none text-gray-800 shadow-inner;
+}

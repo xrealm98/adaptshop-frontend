@@ -1,27 +1,10 @@
-<!-- Botón móvil -->
-<button
-  type="button"
-  (click)="toggleSidebar()"
-  class="text-gray-600 border border-gray-200 hover:bg-gray-100 rounded p-2 ms-3 mt-3 inline-flex sm:hidden"
->
-  <span class="sr-only">Open sidebar</span>
-  <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <path
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-width="2"
-      d="M5 7h14M5 12h14M5 17h10"
-    />
-  </svg>
-</button>
-
 <!-- Sidebar -->
 <aside
-  class="fixed top-0 left-0 z-40 w-64 h-full transition-transform sm:translate-x-0"
+  class="fixed top-0 left-0 z-40 w-64 h-full transition-transform md:translate-x-0"
   [class.-translate-x-full]="!isOpen"
 >
   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 border-r border-gray-200">
-    <ul class="space-y-2 font-medium">
+    <ul class="space-y-2 font-medium" (click)="onClose.emit()">
       <li>
         <a
           routerLink="/admin/dashboard"
@@ -175,5 +158,5 @@
 </aside>
 
 @if (isOpen) {
-  <div class="fixed inset-0 z-30 bg-black/50 sm:hidden" (click)="toggleSidebar()"></div>
+  <div class="fixed inset-0 z-30 bg-black/50 md:hidden" (click)="onClose.emit()"></div>
 }

@@ -1,0 +1,11 @@
+@use 'tailwindcss';
+
+.dashboard-card {
+  @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4;
+}
+.dashboard-card__title {
+  @apply text-sm font-medium text-gray-500 uppercase tracking-wider;
+}
+.dashboard-card__total {
+  @apply text-2xl font-bold text-gray-900;
+}

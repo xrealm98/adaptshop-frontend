@@ -1,25 +1,23 @@
 <footer class="bg-[#000000] text-white">
   <div class="mx-auto w-full max-w-screen-xl py-4">
     <div class="flex flex-col md:flex-row gap-20 lg:gap-90 mb-10 px-4">
-      <div class="flex flex-col items-start">
-        <h3 class="text-lg font-bold border-b border-white pb-1 mb-2 w-fit pr-20">
-          Sobre nosotros
-        </h3>
-        <a href="#" class="footer_link">Quiénes somos</a>
-        <a href="#" class="footer_link">Aviso legal</a>
-        <a href="#" class="footer_link">Política de privacidad</a>
+      <div class="flex flex-col items-start gap-4 md:gap-2">
+        <h3 class="text-lg font-bold border-b border-white pb-1 w-fit pr-20">Sobre nosotros</h3>
+        <a href="#" class="footer__link">Quiénes somos</a>
+        <a href="#" class="footer__link">Aviso legal</a>
+        <a href="#" class="footer__link">Política de privacidad</a>
       </div>
-      <div class="flex flex-col items-start">
-        <h3 class="text-lg font-bold border-b border-white pb-1 mb-2 w-fit pr-20">Contacto</h3>
-        <div class="flex flex-row gap-5 md:gap-10">
-          <a href="'tel:' + settingsService.settings().footer?.phone" class="footer_link">{{
+      <div class="flex flex-col items-start gap-4">
+        <h3 class="text-lg font-bold border-b border-white pb-1 w-fit pr-20">Contacto</h3>
+        <div class="flex flex-col gap-4 md:gap-10 md:flex-row md:gap-5">
+          <a href="'tel:' + settingsService.settings().footer?.phone" class="footer__link">{{
             this.settingsService.settings().footer?.phone
           }}</a>
-          <a href="'mailto:' + settingsService.settings().footer?.email" class="footer_link">{{
+          <a href="'mailto:' + settingsService.settings().footer?.email" class="footer__link">{{
             settingsService.settings().footer?.email
           }}</a>
         </div>
-        <a href="#" class="footer_link">Preguntas frecuentes</a>
+        <a href="#" class="footer__link">Preguntas frecuentes</a>
       </div>
     </div>
     <div class="px-4 py-6 bg-neutral-secondary-soft md:flex md:items-center md:justify-between">
@@ -27,10 +25,10 @@
         >© 2026 <a href="#">{{ this.settingsService.settings().site?.name }}</a
         >. All Rights Reserved.
       </span>
-      <div class="flex mt-4 sm:justify-center md:mt-0 space-x-2 rtl:space-x-reverse">
-        <a href="#" class="text-body hover:text-heading">
+      <div class="flex mt-4 sm:justify-between md:mt-0 space-x-2">
+        <a href="#">
           <svg
-            class="w-5 h-5"
+            class="footer__social-icon"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -46,9 +44,9 @@
           </svg>
           <span class="sr-only">Facebook page</span>
         </a>
-        <a href="#" class="text-body hover:text-heading ms-5">
+        <a href="#" class="ms-5">
           <svg
-            class="w-5 h-5"
+            class="footer__social-icon"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -62,9 +60,9 @@
           </svg>
           <span class="sr-only">Discord community</span>
         </a>
-        <a href="#" class="text-body hover:text-heading ms-5">
+        <a href="#" class="ms-5">
           <svg
-            class="w-5 h-5"
+            class="footer__social-icon"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -78,9 +76,9 @@
           </svg>
           <span class="sr-only">Twitter page</span>
         </a>
-        <a href="#" class="text-body hover:text-heading ms-5">
+        <a href="#" class="ms-5">
           <svg
-            class="w-5 h-5"
+            class="footer__social-icon"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"

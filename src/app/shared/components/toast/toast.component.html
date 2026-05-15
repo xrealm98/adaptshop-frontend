@@ -1,18 +1,50 @@
 @if (notification()) {
   <div class="toast" [class]="notification()!.type">
-    {{ notification()!.message }}
-    <button
-      (click)="close()"
-      class="ml-4 p-1 rounded-md hover:bg-black/5 transition-colors focus:outline-none"
-      title="Cerrar"
-    >
+    <div class="toast__icon-container">
+      @switch (notification()!.type) {
+        @case ('success') {
+          <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        }
+        @case ('error') {
+          <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        }
+        @case ('info') {
+          <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        }
+      }
+    </div>
+    <span class="flex-1 leading-tight">
+      {{ notification()!.message }}
+    </span>
+    <button (click)="close()" class="toast__button" title="Cerrar">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
-        stroke-width="2"
+        stroke-width="3"
         stroke="currentColor"
-        class="size-4"
+        class="size-6"
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>

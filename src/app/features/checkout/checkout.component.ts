@@ -12,6 +12,7 @@ import { NotificationService } from '../../core/services/notification/notificati
 import { OrdersService } from '../../core/services/order/orders.service';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { UserService } from '../../core/services/users/user.service';
+import { Order } from '../../models/order.model';
 import { User } from '../../models/user.model';
 import { FormInputComponent } from '../../shared/components/form-controls/form-input/form-input.component';
 
@@ -92,7 +93,7 @@ export class CheckoutComponent {
         switchMap((result) => this.handlePaymentResult(result)),
       )
       .subscribe({
-        next: () => this.onSuccess(),
+        next: (order) => this.onSuccess(order),
         error: (error) =>
           this.notificationService.showError(
             error.message || 'Hay un problema al procesar el pago',
@@ -142,10 +143,12 @@ export class CheckoutComponent {
     return this.processOrder(result.paymentIntent!.id);
   }
 
-  private onSuccess() {
+  private onSuccess(createdOrder: Order) {
     this.notificationService.showSuccess(`¡Pedido realizado con éxito!`);
     this.cartService.clearCart();
-    this.router.navigate(['/']);
+    this.router.navigate(['/checkout-success'], {
+      state: { order: createdOrder },
+    });
   }
 
   goBack() {

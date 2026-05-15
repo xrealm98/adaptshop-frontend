@@ -63,49 +63,56 @@
           />
         </div>
 
-        <app-form-select
-          id="category_id"
-          label="Categoría del producto (*)"
-          [control]="form.get('category_id')!"
-          [errorMessages]="{ required: 'Selecciona una categoría' }"
-        >
-          <option value="0" disabled>Selecciona una categoría</option>
-          @for (category of categories(); track category.id) {
-            <option [value]="category.id">{{ category.name }}</option>
-          }
-        </app-form-select>
+        <div class="col-span-2 md:col-span-1">
+          <app-form-select
+            id="category_id"
+            label="Categoría del producto (*)"
+            [control]="form.get('category_id')!"
+            [errorMessages]="{ required: 'Selecciona una categoría' }"
+          >
+            <option value="0" disabled>Selecciona una categoría</option>
+            @for (category of categories(); track category.id) {
+              <option [value]="category.id">{{ category.name }}</option>
+            }
+          </app-form-select>
+        </div>
 
-        <app-form-input
-          id="price"
-          label="Precio(€) (*)"
-          type="number"
-          placeholder="0.00"
-          [control]="form.get('price')!"
-          [errorMessages]="{
-            required: 'El precio es obligatorio',
-            min: 'Debe ser mayor o igual a 0',
-          }"
-        />
+        <div class="col-span-2 md:col-span-1">
+          <app-form-input
+            id="price"
+            label="Precio(€) (*)"
+            type="number"
+            placeholder="0.00"
+            [control]="form.get('price')!"
+            [errorMessages]="{
+              required: 'El precio es obligatorio',
+              min: 'Debe ser mayor o igual a 0',
+            }"
+          />
+        </div>
+        <div class="col-span-2 md:col-span-1">
+          <app-form-input
+            id="stock"
+            label="Stock (*)"
+            type="number"
+            placeholder="0"
+            [control]="form.get('stock')!"
+            [errorMessages]="{
+              required: 'El stock es obligatorio',
+              min: 'Debe ser mayor o igual a 0',
+            }"
+          />
+        </div>
 
-        <app-form-input
-          id="stock"
-          label="Stock (*)"
-          type="number"
-          placeholder="0"
-          [control]="form.get('stock')!"
-          [errorMessages]="{
-            required: 'El stock es obligatorio',
-            min: 'Debe ser mayor o igual a 0',
-          }"
-        />
-
-        <app-form-input
-          id="image"
-          label="URL imagen"
-          type="text"
-          placeholder="https://..."
-          [control]="form.get('image')!"
-        />
+        <div class="col-span-2 md:col-span-1">
+          <app-form-input
+            id="image"
+            label="URL imagen"
+            type="text"
+            placeholder="https://..."
+            [control]="form.get('image')!"
+          />
+        </div>
 
         <div class="col-span-2 flex items-center gap-3">
           <input
@@ -118,16 +125,16 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 mt-2">
+      <div class="flex flex-col md:flex-row md:justify-end gap-3 mt-2">
+        <button type="submit" [disabled]="form.invalid" class="form_button">
+          {{ isEditMode ? 'Guardar cambios' : 'Crear producto' }}
+        </button>
         <button
           type="button"
           (click)="goBack()"
           class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition cursor-pointer"
         >
           Cancelar
-        </button>
-        <button type="submit" [disabled]="form.invalid" class="form_button w-auto">
-          {{ isEditMode ? 'Guardar cambios' : 'Crear producto' }}
         </button>
       </div>
     </form>

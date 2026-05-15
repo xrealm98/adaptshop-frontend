@@ -43,9 +43,16 @@ export class LoginComponent {
           this.notificationService.showInfo('Sesión iniciada. Bienvenido.');
           this.router.navigate(['/']);
         },
-        error: () => {
-          this.notificationService.showError('Credenciales incorrectas. Inténtalo de nuevo.');
-          this.errorMessage = 'Credenciales incorrectas';
+        error: (err) => {
+          if (err.message === 'USER_BLOCKED') {
+            this.errorMessage = 'La cuenta ha sido bloqueada.';
+            this.notificationService.showError(
+              `Tu cuenta ha sido bloqueada. Contacta con soporte.`,
+            );
+          } else {
+            this.errorMessage = 'Credenciales incorrectas.';
+            this.notificationService.showError(`Credenciales incorrectas. Inténtalo de nuevo.`);
+          }
         },
       });
     }

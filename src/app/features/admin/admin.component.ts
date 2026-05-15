@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
@@ -13,6 +13,7 @@ import { Sidebar } from './components/sidebar/sidebar';
 })
 export class AdminComponent {
   private title = inject(Title);
+  isSidebarOpen = signal<boolean>(false);
   constructor() {
     this.title.setTitle(`Administración`);
   }
