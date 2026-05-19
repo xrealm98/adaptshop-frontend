@@ -2,6 +2,7 @@
   class="flex flex-col md:flex-row gap-4 mt-3 mb-6 items-stretch sm:items-center justify-between"
 >
   <div class="relative flex-1 max-w-md">
+    <label for="table-search" class="sr-only">{{ placeholder() }}</label>
     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
       <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
@@ -13,6 +14,7 @@
       </svg>
     </div>
     <input
+      id="table-search"
       type="text"
       (input)="handleSearch($event)"
       [placeholder]="placeholder()"
@@ -25,7 +27,7 @@
       (click)="handleAdd()"
       class="inline-flex items-center justify-center px-6 py-2.5 border text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all cursor-pointer"
     >
-      + {{ buttonLabel() }}
+      <span aria-hidden="true" class="mr-1">+</span> {{ buttonLabel() }}
     </button>
   }
 </div>

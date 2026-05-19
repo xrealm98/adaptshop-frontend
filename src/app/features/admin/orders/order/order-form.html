@@ -4,6 +4,7 @@
       type="button"
       (click)="goBack()"
       class="text-gray-500 hover:text-gray-800 transition p-2 hover:bg-gray-100 rounded-full cursor-pointer"
+      aria-label="Volver al listado de pedidos"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -12,6 +13,7 @@
         stroke-width="2"
         stroke="currentColor"
         class="size-6"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -38,6 +40,7 @@
               label="Calle y Número (*)"
               type="text"
               [control]="orderForm.get('shipping_street')!"
+              [attr.aria-required]="true"
               [errorMessages]="{
                 required: 'La dirección es obligatoria',
               }"
@@ -48,6 +51,7 @@
             label="Ciudad (*)"
             type="text"
             [control]="orderForm.get('shipping_city')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'La ciudad es obligatoria',
             }"
@@ -58,6 +62,7 @@
             label="Provincia (*)"
             type="text"
             [control]="orderForm.get('shipping_province')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'La provincia es obligatoria',
             }"
@@ -68,6 +73,7 @@
             label="Código Postal (*)"
             type="text"
             [control]="orderForm.get('shipping_postal_code')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El código postal es obligatorio',
             }"
@@ -78,6 +84,7 @@
             label="País (*)"
             type="text"
             [control]="orderForm.get('shipping_country')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El país es obligatorio',
             }"
@@ -91,9 +98,9 @@
           <table class="w-full text-left border-collapse">
             <thead class="bg-gray-50">
               <tr>
-                <th class="table__th">Producto</th>
-                <th class="table__th">Cant.</th>
-                <th class="table__th">Precio</th>
+                <th scope="col" class="table__th">Producto</th>
+                <th scope="col" class="table__th">Cant.</th>
+                <th scope="col" class="table__th">Precio</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">

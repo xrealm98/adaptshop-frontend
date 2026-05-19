@@ -1,6 +1,12 @@
 @if (notification()) {
-  <div class="toast" [class]="notification()!.type">
-    <div class="toast__icon-container">
+  <div
+    class="toast"
+    [class]="notification()!.type"
+    [attr.role]="notification()!.type === 'error' ? 'alert' : 'status'"
+    [attr.aria-live]="notification()!.type === 'error' ? 'assertive' : 'polite'"
+    aria-atomic="true"
+  >
+    <div class="toast__icon-container" aria-hidden="true">
       @switch (notification()!.type) {
         @case ('success') {
           <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,9 +41,10 @@
       }
     </div>
     <span class="flex-1 leading-tight">
+      <span class="sr-only">Notificación de {{ notification()!.type }}: </span>
       {{ notification()!.message }}
     </span>
-    <button (click)="close()" class="toast__button" title="Cerrar">
+    <button (click)="close()" type="button" class="toast__button" aria-label="Cerrar notificación">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -45,6 +52,7 @@
         stroke-width="3"
         stroke="currentColor"
         class="size-6"
+        aria-hidden="true"
       >
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>

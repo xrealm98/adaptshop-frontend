@@ -7,7 +7,9 @@
 
 <app-table [columns]="columns" [data]="categories()" emptyMessage="No hay categorías disponibles.">
   <ng-template #rowTemplate let-category>
-    <td class="px-6 py-4 border-r border-gray-200 font-medium text-gray-900">{{ category.id }}</td>
+    <th scope="row" class="px-6 py-4 border-r border-gray-200 font-medium text-gray-900">
+      {{ category.id }}
+    </th>
     <td class="px-6 py-4 border-r border-gray-200 font-semibold">{{ category.name }}</td>
     <td class="px-6 py-4 border-r border-gray-200 text-gray-400 italic">{{ category.slug }}</td>
   </ng-template>
@@ -17,7 +19,7 @@
       [routerLink]="['/admin/categories/edit', category.id]"
       class="table__button--edit"
       title="Editar categoría"
-      aria-label="Editar categoría"
+      [attr.aria-label]="'Editar categoría: ' + category.name"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +28,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -38,7 +41,7 @@
       (click)="deleteCategory(category.id)"
       class="table__button--delete"
       title="Eliminar categoría"
-      aria-label="Eliminar categoría"
+      [attr.aria-label]="'Eliminar categoría: ' + category.name"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +50,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"

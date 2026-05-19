@@ -7,9 +7,9 @@
   <ng-template #rowTemplate let-order>
     @let status = getStatusInfo(order.status);
 
-    <td class="px-6 py-4 border-r border-gray-200 font-mono text-sm text-gray-600">
-      {{ order.id }}
-    </td>
+    <th scope="row" class="px-6 py-4 border-r border-gray-200 font-mono text-sm text-gray-600">
+      <span class="sr-only">Pedido número: </span>{{ order.id }}
+    </th>
     <td class="table__td">
       <div class="font-semibold text-gray-900">
         {{ order.user?.first_name }} {{ order.user?.last_name }}
@@ -17,12 +17,14 @@
       <div class="text-xs text-gray-400">{{ order.shipping_city }}</div>
     </td>
     <td class="table__td text-gray-600">
-      {{ order.created_at | date: 'd/M/yy, h:mm a' }}
+      <span class="sr-only">Fecha del pedido: </span>{{ order.created_at | date: 'd/M/yy, h:mm a' }}
     </td>
-    <td class="table__td font-bold text-gray-900">{{ order.total }}€</td>
+    <td class="table__td font-bold text-gray-900">
+      <span class="sr-only">Importe total: </span>{{ order.total }}€
+    </td>
     <td class="table__td">
       <span [class]="status.css">
-        {{ status.label }}
+        <span class="sr-only">Estado del envío: </span>{{ status.label }}
       </span>
     </td>
   </ng-template>
@@ -31,7 +33,7 @@
     <button
       [routerLink]="['/admin/orders/edit', order.id]"
       class="table__button--edit"
-      title="Editar pedido"
+      [attr.aria-label]="'Gestionar y editar pedido número ' + order.id"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +42,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"

@@ -11,4 +11,13 @@ import { ToastComponent } from '../toast/toast.component';
   templateUrl: './shop-layout.html',
   styleUrl: './shop-layout.scss',
 })
-export class ShopLayout {}
+export class ShopLayout {
+  scrollToContent(event: Event, targetId: string): void {
+    event.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.focus();
+    }
+  }
+}

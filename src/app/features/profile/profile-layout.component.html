@@ -1,12 +1,19 @@
+<button
+  type="button"
+  (click)="scrollToContent($event, 'profile-content')"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+>
+  Saltar al contenido del perfil
+</button>
 <div class="max-w-7xl mx-auto mt-10 px-4 flex flex-col md:flex-row gap-8">
-  <aside class="w-full md:w-64 flex-shrink-0">
+  <aside class="w-full md:w-64 shrink-0">
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="p-6 border-b border-gray-50">
         <h2 class="text-lg font-bold text-gray-800">Mi Cuenta</h2>
         <p class="text-xs text-gray-400 truncate">{{ authService.user()?.email }}</p>
       </div>
 
-      <nav class="flex flex-col p-2">
+      <nav class="flex flex-col p-2" aria-label="Menú del perfil de usuario">
         <a routerLink="profile" routerLinkActive="active-tab" class="sidebar-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -15,6 +22,7 @@
             stroke-width="1.5"
             stroke="currentColor"
             class="size-6"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -32,6 +40,7 @@
             stroke-width="1.5"
             stroke="currentColor"
             class="size-6"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -45,7 +54,11 @@
     </div>
   </aside>
 
-  <main class="flex-grow bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-8">
+  <main
+    id="profile-content"
+    class="grow bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-8"
+    tabindex="-1"
+  >
     <router-outlet></router-outlet>
   </main>
   <app-toast />

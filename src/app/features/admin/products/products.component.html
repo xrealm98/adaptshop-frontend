@@ -9,16 +9,22 @@
   <ng-template #rowTemplate let-product>
     <td class="px-6 py-4 border-r border-gray-200">
       @if (product.image) {
-        <img [src]="product.image" [alt]="product.name" class="w-12 h-12 object-cover rounded-lg" />
+        <img
+          [src]="product.image"
+          [alt]="product.name"
+          class="w-12 h-12 object-cover rounded-lg"
+          aria-hidden="true"
+        />
       } @else {
         <div
           class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-xs"
+          aria-hidden="true"
         >
           Sin imagen
         </div>
       }
     </td>
-    <td class="table__td table__td--bold">{{ product.name }}</td>
+    <th scope="row" class="table__td table__td--bold">{{ product.name }}</th>
     <td class="table__td">{{ product.category?.name }}</td>
     <td class="table__td">{{ product.stock }}</td>
     <td class="table__td">
@@ -38,7 +44,7 @@
     <button
       [routerLink]="['/admin/products/edit', product.id]"
       class="p-2 text-amber-600 bg-amber-50 rounded-lg hover:bg-amber-600 hover:text-white transition-all duration-200 shadow-sm"
-      title="Editar producto"
+      [attr.aria-label]="'Editar producto: ' + product.name"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +53,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -59,7 +66,7 @@
     <button
       (click)="deleteProduct(product.id)"
       class="p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 shadow-sm"
-      title="Eliminar producto"
+      [attr.aria-label]="'Eliminar producto: ' + product.name"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -68,6 +75,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"

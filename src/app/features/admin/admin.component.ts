@@ -17,4 +17,13 @@ export class AdminComponent {
   constructor() {
     this.title.setTitle(`Administración`);
   }
+
+  scrollToContent(event: Event, targetId: string): void {
+    event.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.focus();
+    }
+  }
 }

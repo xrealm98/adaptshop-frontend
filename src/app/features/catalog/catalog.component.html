@@ -2,9 +2,13 @@
   <div class="md:hidden mb-4">
     <button
       (click)="isFilterMenuOpen.set(true)"
+      type="button"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="isFilterMenuOpen()"
+      aria-controls="mobile-filter-dialog"
       class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-white border border-gray-300 rounded-xl font-semibold text-gray-700 shadow-sm"
     >
-      <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="size-5" fill="none" stroke="currentColor" aria-hidden="true" viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -18,11 +22,11 @@
   <div class="flex flex-col md:flex-row gap-6 lg:gap-10">
     <!-- Sidebar de los filtros -->
     <aside class="hidden md:block w-48 lg:w-66 shrink-0 border-r border-gray-100 pr-6">
-      <ng-container *ngTemplateOutlet="filtrosContent"></ng-container>
+      <ng-container *ngTemplateOutlet="filtrosContent; context: { isMobile: false }"></ng-container>
     </aside>
 
     <!-- Productos -->
-    <div class="flex-1">
+    <div class="flex-1" id="catalog-main-content">
       <app-breadcrumb [items]="breadcrumbs()"></app-breadcrumb>
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
@@ -37,14 +41,18 @@
           }
         </div>
       </div>
-      <p class="text-sm text-gray-500 my-4 font-bold text-right">
-        Se están mostrando {{ products().length }} de {{ totalResults() }} resultados totales.
-      </p>
+      <div aria-live="polite" aria-atomic="true" class="my-4">
+        <p class="text-sm text-gray-500 font-bold text-right">
+          Se están mostrando {{ products().length }} de {{ totalResults() }} resultados totales.
+        </p>
+      </div>
 
       <!-- Grid productos -->
       @if (products().length > 0) {
         <div
           class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-6"
+          role="region"
+          aria-label="Resultados del catálogo"
         >
           @for (product of products(); track product.id) {
             <app-product-card [product]="product" />
@@ -58,7 +66,7 @@
         >
         </app-pagination>
       } @else {
-        <div class="py-20 text-center">
+        <div class="py-20 text-center" role="status">
           <p class="text-gray-400 text-lg font-medium">No se encontraron productos.</p>
           <button (click)="clearFilters()" class="mt-4 text-blue-600 hover:underline text-sm">
             Limpiar filtros
@@ -75,28 +83,41 @@
 
 <!-- Menu filtro móvil -->
 <div
+  id="mobile-filter-dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="mobile-filter-title"
+  [attr.aria-hidden]="!isFilterMenuOpen()"
   class="fixed top-0 left-0 right-0 bg-white rounded-b-2xl shadow-2xl z-50 md:hidden transition-transform duration-300 max-h-[85vh] overflow-y-auto"
   [class.translate-y-0]="isFilterMenuOpen()"
   [class.-translate-y-full]="!isFilterMenuOpen()"
 >
-  <div class="flex justify-center pt-3 pb-2">
+  <div class="flex justify-center pt-3 pb-2" aria-hidden="true">
     <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
   </div>
   <div class="flex items-center justify-between px-6 py-3 border-b">
-    <h3 class="font-bold text-gray-800 text-lg">Filtrar y ordenar</h3>
-    <button (click)="isFilterMenuOpen.set(false)" class="text-gray-400 hover:text-gray-600">
+    <h3 id="mobile-filter-title" class="font-bold text-gray-800 text-lg">Filtrar y ordenar</h3>
+    <button
+      (click)="isFilterMenuOpen.set(false)"
+      type="button"
+      class="text-gray-400 hover:text-gray-600"
+      aria-label="Cerrar menú de filtros"
+      [attr.tabindex]="isFilterMenuOpen() ? 0 : -1"
+    >
       ✕
     </button>
   </div>
 
   <div class="px-6 py-4">
-    <ng-container *ngTemplateOutlet="filtrosContent"></ng-container>
+    <ng-container *ngTemplateOutlet="filtrosContent; context: { isMobile: true }"></ng-container>
   </div>
 
   <div class="px-6 pb-6 pt-2">
     <button
       (click)="isFilterMenuOpen.set(false)"
       class="w-full bg-green-600 text-white py-3 rounded-xl font-bold"
+      type="button"
+      [attr.tabindex]="isFilterMenuOpen() ? 0 : -1"
     >
       Ver resultados
     </button>
@@ -104,16 +125,21 @@
 </div>
 
 <!-- Plantilla filtros desktop y móvil -->
-<ng-template #filtrosContent>
+<ng-template #filtrosContent let-isMobile="isMobile">
+  @let currentTabindex = !isMobile || isFilterMenuOpen() ? 0 : -1;
+
   <div class="mb-6">
-    <h3 class="font-bold text-gray-800 mb-3">Categorías</h3>
-    <ul class="space-y-1">
+    <h3 class="font-bold text-gray-800 mb-3" id="cat-heading">Categorías</h3>
+    <ul class="space-y-1" aria-labelledby="cat-heading">
       <li>
         <button
           (click)="selectCategory(null)"
+          type="button"
+          [attr.tabindex]="currentTabindex"
           class="w-full text-left px-2 py-1.5 rounded text-sm transition cursor-pointer"
           [class.font-bold]="filterSelectedCategory() === null"
           [class.text-blue-600]="filterSelectedCategory() === null"
+          [attr.aria-current]="filterSelectedCategory() === null ? 'page' : null"
         >
           Todas
         </button>
@@ -122,9 +148,12 @@
         <li>
           <button
             (click)="selectCategory(cat.id)"
+            type="button"
+            [attr.tabindex]="currentTabindex"
             class="w-full text-left px-2 py-1.5 rounded text-sm transition hover:text-blue-600 cursor-pointer"
             [class.font-bold]="filterSelectedCategory() === cat.id"
             [class.text-blue-600]="filterSelectedCategory() === cat.id"
+            [attr.aria-current]="filterSelectedCategory() === cat.id ? 'page' : null"
           >
             {{ cat.name }}
           </button>
@@ -134,30 +163,42 @@
   </div>
 
   <div class="mb-6">
-    <h3 class="font-bold text-gray-800 mb-3">Precio</h3>
-    <div class="flex gap-2">
-      <input
-        type="number"
-        [value]="filterMinPrice()"
-        (input)="updateMinPrice($event)"
-        placeholder="Min"
-        min="0"
-        class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        type="number"
-        [value]="filterMaxPrice()"
-        (change)="updateMaxPrice($event)"
-        placeholder="Max"
-        min="0"
-        class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+    <h3 class="font-bold text-gray-800 mb-3" id="price-heading">Precio</h3>
+    <div class="flex gap-2" role="group" aria-labelledby="price-heading">
+      <div class="w-full">
+        <label for="min-price-input" class="sr-only">Precio mínimo</label>
+        <input
+          id="min-price-input"
+          type="number"
+          [attr.tabindex]="currentTabindex"
+          [value]="filterMinPrice()"
+          (input)="updateMinPrice($event)"
+          placeholder="Mín"
+          min="0"
+          class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div class="w-full">
+        <label for="max-price-input" class="sr-only">Precio máximo</label>
+        <input
+          id="max-price-input"
+          type="number"
+          [attr.tabindex]="currentTabindex"
+          [value]="filterMaxPrice()"
+          (change)="updateMaxPrice($event)"
+          placeholder="Máx"
+          min="0"
+          class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
     </div>
   </div>
 
   <div class="mb-6">
-    <h3 class="font-bold text-gray-800 mb-3">Ordenar por</h3>
+    <label for="sort-select" class="block font-bold text-gray-800 mb-3">Ordenar por</label>
     <select
+      id="sort-select"
+      [attr.tabindex]="currentTabindex"
       [value]="filterSortBy()"
       (change)="updateSort($event)"
       class="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -170,7 +211,9 @@
 
   <button
     (click)="clearFilters()"
-    class="w-full text-sm text-red-500 hover:text-red-700 transition text-left"
+    type="button"
+    [attr.tabindex]="currentTabindex"
+    class="w-full text-sm text-red-500 hover:text-red-700 transition text-left cursor-pointer font-semibold"
   >
     Limpiar filtros
   </button>

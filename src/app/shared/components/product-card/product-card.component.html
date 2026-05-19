@@ -1,14 +1,17 @@
 <div
   class="group relative bg-white rounded-2xl border border-black-100 p-2 md:p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full"
 >
-  <div
+  <a
+    [routerLink]="['/product', product.slug]"
     class="relative aspect-square overflow-hidden rounded-xl mb-5 bg-gray-50 flex items-center justify-center"
+    tabindex="-1"
+    aria-hidden="true"
   >
     <img
       [src]="
         product.image && product.image.trim() !== '' ? product.image : '/images/placeholder.svg'
       "
-      [alt]="product.name"
+      [alt]="''"
       class="h-full w-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
     />
     <span
@@ -16,8 +19,7 @@
     >
       {{ product.stock }}U
     </span>
-  </div>
-
+  </a>
   <div class="flex flex-col flex-1">
     <div class="flex flex-col md:flex-row md:justify-between items-start gap-4 mb-2">
       <a [routerLink]="['/product', product.slug]">
@@ -46,14 +48,21 @@
       <button
         (click)="decrease()"
         [disabled]="itemQuantity() === 0"
-        class="w-20 h-10 flex items-center justify-center bg-green-600 text-white hover:bg-green-500 transition-colors cursor-pointer"
+        class="w-20 h-10 flex items-center justify-center bg-green-600 text-white hover:bg-green-500 transition-colors cursor-pointer disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+        [attr.aria-label]="'Restar una unidad de ' + product.name"
       >
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4" />
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
         </svg>
       </button>
 
-      <span class="font-black text-gray-800 px-4 md:px-10 text-lg">{{ itemQuantity() }}</span>
+      <span
+        class="font-black text-gray-800 px-4 md:px-10 text-lg"
+        aria-live="polite"
+        [attr.aria-label]="itemQuantity() + ' unidades seleccionadas'"
+      >
+        {{ itemQuantity() }}
+      </span>
 
       <button
         (click)="addItemToCart()"
@@ -64,14 +73,10 @@
             : 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
         "
         class="w-20 h-10 flex items-center justify-center transition-colors"
+        [attr.aria-label]="'Añadir una unidad de ' + product.name"
       >
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="3"
-            d="M12 4v16m8-8H4"
-          />
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
       </button>
     </div>

@@ -1,6 +1,10 @@
 <div class="max-w-2xl mx-auto">
   <div class="flex items-center gap-3 mb-6">
-    <button (click)="goBack()" class="text-gray-500 hover:text-gray-700 cursor-pointer transition">
+    <button
+      (click)="goBack()"
+      class="text-gray-500 hover:text-gray-700 cursor-pointer transition"
+      aria-label="Volver al listado de productos"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -8,6 +12,7 @@
         stroke-width="1.5"
         stroke="currentColor"
         class="size-5"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -30,6 +35,7 @@
             label="Nombre (*)"
             type="text"
             placeholder="Nombre del producto"
+            [attr.aria-required]="true"
             [control]="form.get('name')!"
             [errorMessages]="{
               required: 'El nombre es obligatorio',
@@ -57,6 +63,7 @@
             [rows]="5"
             placeholder="Descripción extensa del producto"
             [control]="form.get('description')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'La descripción es obligatoria',
             }"
@@ -68,6 +75,7 @@
             id="category_id"
             label="Categoría del producto (*)"
             [control]="form.get('category_id')!"
+            [attr.aria-required]="true"
             [errorMessages]="{ required: 'Selecciona una categoría' }"
           >
             <option value="0" disabled>Selecciona una categoría</option>
@@ -84,6 +92,7 @@
             type="number"
             placeholder="0.00"
             [control]="form.get('price')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El precio es obligatorio',
               min: 'Debe ser mayor o igual a 0',
@@ -97,6 +106,7 @@
             type="number"
             placeholder="0"
             [control]="form.get('stock')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El stock es obligatorio',
               min: 'Debe ser mayor o igual a 0',

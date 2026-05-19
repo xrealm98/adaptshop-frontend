@@ -11,4 +11,13 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
 })
 export class ProfileLayoutComponent {
   public authService = inject(AuthService);
+
+  scrollToContent(event: Event, targetId: string): void {
+    event.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.focus();
+    }
+  }
 }
