@@ -33,7 +33,7 @@ export class HomeComponent {
   homeBanners = computed(() => {
     const settings = this.settingsService.settings();
     if (!settings) return null;
-    return settings.home?.banners;
+    return settings.home?.banners || [];
   });
 
   ngOnInit() {
