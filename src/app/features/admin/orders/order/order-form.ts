@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { OrdersService } from '../../../../core/services/order/orders.service';
 import { Order } from '../../../../models/order.model';
 import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
@@ -15,6 +16,7 @@ import { FormSelectComponent } from '../../../../shared/components/form-controls
 export class OrderForm {
   private fb = inject(FormBuilder);
   private orderService = inject(OrdersService);
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -54,8 +56,14 @@ export class OrderForm {
     if (this.orderForm.invalid || !this.orderId) return;
     const data = this.orderForm.getRawValue() as Partial<Order>;
     this.orderService.updateOrder(this.orderId, data).subscribe({
-      next: () => this.router.navigate(['/admin/orders']),
-      error: (err) => console.error('Error al actualizar', err),
+      next: () => {
+        this.notificationService.showSuccess(`Pedido actualizado correctamente.`);
+        this.router.navigate(['/admin/orders']);
+      },
+      error: (err) => {
+        this.notificationService.showError(`No se ha podido actualizar el pedido.`);
+        console.error('Error al actualizar', err);
+      },
     });
   }
 

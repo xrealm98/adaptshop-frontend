@@ -1,0 +1,256 @@
+<div class="max-w-lg">
+  <h2 class="text-xl font-semibold text-gray-800 mb-6">Configuración del sitio</h2>
+
+  <div
+    role="tablist"
+    aria-label="Secciones de configuración"
+    class="flex border-b border-gray-200 mb-6"
+  >
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'site'"
+      (click)="activeTab.set('site')"
+      class="px-4 py-2 text-sm font-medium border-b-2 transition cursor-pointer"
+      [class.border-blue-600]="activeTab() === 'site'"
+      [class.text-blue-600]="activeTab() === 'site'"
+      [class.border-transparent]="activeTab() !== 'site'"
+      [class.text-gray-500]="activeTab() !== 'site'"
+    >
+      Sitio
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'home'"
+      (click)="activeTab.set('home')"
+      class="px-4 py-2 text-sm font-medium border-b-2 transition cursor-pointer"
+      [class.border-blue-600]="activeTab() === 'home'"
+      [class.text-blue-600]="activeTab() === 'home'"
+      [class.border-transparent]="activeTab() !== 'home'"
+      [class.text-gray-500]="activeTab() !== 'home'"
+    >
+      Inicio (Home)
+    </button>
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'footer'"
+      (click)="activeTab.set('footer')"
+      class="px-4 py-2 text-sm font-medium border-b-2 transition cursor-pointer"
+      [class.border-blue-600]="activeTab() === 'footer'"
+      [class.text-blue-600]="activeTab() === 'footer'"
+      [class.border-transparent]="activeTab() !== 'footer'"
+      [class.text-gray-500]="activeTab() !== 'footer'"
+    >
+      Footer
+    </button>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    @if (activeTab() === 'site') {
+      <form [formGroup]="siteForm" (ngSubmit)="onSubmitSite()" class="flex flex-col gap-4">
+        <app-form-input
+          id="name"
+          label="Nombre del sitio"
+          [control]="siteForm.get('name')!"
+          [errorMessages]="{ required: 'El nombre es obligatorio' }"
+        />
+
+        <app-form-input
+          id="header_color"
+          type="color"
+          label="Color de fondo de la cabecera"
+          [control]="siteForm.get('header_color')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color del texto de la cabecera"
+          [control]="siteForm.get('header_text_color')!"
+        />
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" [disabled]="siteForm.invalid" class="form_button w-auto">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (activeTab() === 'home') {
+      <form [formGroup]="homeForm" (ngSubmit)="onSubmitHome()" class="flex flex-col gap-6">
+        <!-- Categoría destacada (slider) -->
+        <div>
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Categoría destacada en slider</h3>
+          <select
+            formControlName="featured_category_id"
+            class="form_input"
+            aria-label="Seleccionar categoría destacada"
+          >
+            <option [ngValue]="null">Sin selección (primera categoría)</option>
+            @for (cat of categories(); track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+        </div>
+
+        <hr class="border-gray-100" />
+
+        <!-- Botones de categoría -->
+        <div>
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Botones de categoría (máx. 4)</h3>
+          <p class="text-xs text-gray-400 mb-3">Selecciona hasta 4 categorías.</p>
+
+          <div class="flex flex-col gap-3">
+            @for (btn of categoryButtons(); track $index; let i = $index) {
+              <div class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+                <span class="text-sm font-medium text-gray-500 w-4">{{ i + 1 }}</span>
+                <select
+                  (change)="updateCategoryButton(i, 'category_id', $event)"
+                  class="form_input flex-1"
+                  aria-label="Seleccionar categoría"
+                >
+                  <option [value]="0" [selected]="+btn.category_id === 0">Sin selección</option>
+
+                  @for (cat of categories(); track cat.id) {
+                    <option [value]="cat.id" [selected]="+btn.category_id === +cat.id">
+                      {{ cat.name }}
+                    </option>
+                  }
+                </select>
+                <select
+                  [value]="btn.color"
+                  (change)="updateCategoryButton(i, 'color', $event)"
+                  class="form_input w-32"
+                  aria-label="Seleccionar color"
+                >
+                  <option value="emerald">Verde</option>
+                  <option value="sky">Azul</option>
+                  <option value="orange">Naranja</option>
+                  <option value="slate">Gris</option>
+                  <option value="purple">Morado</option>
+                  <option value="rose">Rosa</option>
+                </select>
+              </div>
+            }
+          </div>
+        </div>
+
+        <hr class="border-gray-100" />
+
+        <div>
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Banners de Home (Máx. 3)</h3>
+          <div class="flex flex-col gap-4">
+            @for (banner of homeBanners(); track $index; let i = $index) {
+              <div class="p-4 border border-gray-200 rounded-lg bg-gray-50/50 flex flex-col gap-3">
+                <span class="text-xs font-bold text-blue-600 uppercase">Banner {{ i + 1 }}</span>
+
+                <input
+                  type="text"
+                  [value]="banner.title"
+                  (input)="updateHomeBanner(i, 'title', $event)"
+                  placeholder="Título"
+                  class="form_input"
+                  aria-label="Título del banner"
+                />
+
+                <input
+                  type="text"
+                  [value]="banner.subtitle"
+                  (input)="updateHomeBanner(i, 'subtitle', $event)"
+                  placeholder="Subtítulo"
+                  class="form_input"
+                  aria-label="Subtítulo del banner"
+                />
+
+                <input
+                  type="text"
+                  [value]="banner.image"
+                  (input)="updateHomeBanner(i, 'image', $event)"
+                  placeholder="URL de la imagen"
+                  class="form_input"
+                  aria-label="Imagen del banner"
+                />
+
+                <input
+                  type="text"
+                  [value]="banner.buttonText"
+                  (input)="updateHomeBanner(i, 'buttonText', $event)"
+                  placeholder="Texto del botón (Opcional)"
+                  class="form_input"
+                  aria-label="Texto del botón del banner"
+                />
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" class="form_button w-auto">Guardar cambios</button>
+        </div>
+      </form>
+    }
+    @if (activeTab() === 'footer') {
+      <form [formGroup]="footerForm" (ngSubmit)="onSubmitFooter()" class="flex flex-col gap-4">
+        <app-form-input
+          id="phone"
+          label="Teléfono"
+          [control]="footerForm.get('phone')!"
+          [errorMessages]="{ required: 'El teléfono es obligatorio' }"
+        />
+        <app-form-input
+          id="email"
+          label="Email de contacto"
+          type="email"
+          [control]="footerForm.get('email')!"
+          [errorMessages]="{
+            required: 'El email es obligatorio',
+            email: 'Introduce un email válido',
+          }"
+        />
+        <app-form-input
+          id="faq_url"
+          label="URL Preguntas frecuentes"
+          [control]="footerForm.get('faq_url')!"
+        />
+        <app-form-input
+          id="about_url"
+          label="URL Quiénes somos"
+          [control]="footerForm.get('about_url')!"
+        />
+        <app-form-input
+          id="legal_url"
+          label="URL Aviso legal"
+          [control]="footerForm.get('legal_url')!"
+        />
+        <app-form-input
+          id="privacy_url"
+          label="URL Política de privacidad"
+          [control]="footerForm.get('privacy_url')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color de fondo"
+          [control]="footerForm.get('footer_color')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color del texto"
+          [control]="footerForm.get('footer_text_color')!"
+        />
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" [disabled]="footerForm.invalid" class="form_button w-auto">
+            Guardar cambios
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

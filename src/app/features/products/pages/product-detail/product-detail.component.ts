@@ -3,7 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { CartService } from '../../../../core/services/cart/cart.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { ProductService } from '../../../../core/services/products/product.service';
+import { getProductImageSrc, getProductImageSrcset } from '../../../../core/utils/image.utils';
 import { Breadcrumb } from '../../../../models/breadcrumb.model';
 import { Product } from '../../../../models/product.model';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
@@ -19,10 +21,14 @@ export class ProductDetailComponent {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private notificationService = inject(NotificationService);
   private title = inject(Title);
 
   product = signal<Product | null>(null);
   relatedProducts = signal<Product[]>([]);
+
+  getImageSrc = getProductImageSrc;
+  getImageSrcset = getProductImageSrcset;
 
   itemQuantity = computed(() => {
     const item = this.cartService.cartItems().find((i) => i.id === this.product()?.id);
@@ -107,6 +113,7 @@ export class ProductDetailComponent {
         this.cartService.updateQuantity(p.id, this.quantity());
       }
     }
+    this.notificationService.showSuccess('Carrito actualizado correctamente');
     this.cartService.openSidebar();
   }
 }

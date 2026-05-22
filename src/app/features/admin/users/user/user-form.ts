@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { UserService } from '../../../../core/services/users/user.service';
 import { User } from '../../../../models/user.model';
 import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
@@ -15,6 +16,7 @@ import { FormSelectComponent } from '../../../../shared/components/form-controls
 export class UserForm {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -69,8 +71,14 @@ export class UserForm {
     const data = this.form.getRawValue() as Partial<User>;
 
     this.userService.updateUser(this.userId, data).subscribe({
-      next: () => this.router.navigate(['/admin/users']),
-      error: (err) => console.error('Error al actualizar', err),
+      next: () => {
+        this.notificationService.showSuccess(`Usuario actualizado correctamente.`);
+        this.router.navigate(['/admin/users']);
+      },
+      error: (err) => {
+        this.notificationService.showError(`Error al actualizar el usuario.`);
+        console.error('Error al actualizar', err);
+      },
     });
   }
 

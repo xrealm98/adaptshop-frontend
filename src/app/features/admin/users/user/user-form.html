@@ -12,6 +12,7 @@
         stroke-width="2"
         stroke="currentColor"
         class="size-6"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -33,6 +34,7 @@
             label="Nombre (*)"
             type="text"
             [control]="form.get('first_name')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El nombre es obligatorio',
             }"
@@ -42,6 +44,7 @@
             label="Apellido (*)"
             type="text"
             [control]="form.get('last_name')!"
+            [attr.aria-required]="true"
             [errorMessages]="{
               required: 'El apellido es obligatorio',
             }"
@@ -53,15 +56,11 @@
               label="Email (Solo lectura)"
               type="email"
               [control]="form.get('email')!"
+              [readonly]="true"
             />
           </div>
           <div class="md:col-span-2">
-            <app-form-input
-              id="phone"
-              label="Teléfono"
-              type="text"
-              [control]="form.get('phone')!"
-            />
+            <app-form-input id="phone" label="Teléfono" type="tel" [control]="form.get('phone')!" />
           </div>
         </div>
       </div>

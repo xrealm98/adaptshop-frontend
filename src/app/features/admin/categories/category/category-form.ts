@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService } from '../../../../core/services/categories/category.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { FormInputComponent } from '../../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
@@ -13,6 +14,7 @@ import { FormInputComponent } from '../../../../shared/components/form-controls/
 export class CategoryForm {
   private fb = inject(FormBuilder);
   private categoryService = inject(CategoryService);
+  private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -40,13 +42,25 @@ export class CategoryForm {
 
     if (this.isEditMode) {
       this.categoryService.updateCategory(this.categoryId!, { name }).subscribe({
-        next: () => this.router.navigate(['/admin/categories']),
-        error: (err) => console.error(err),
+        next: () => {
+          this.notificationService.showSuccess('Categoría actualizada correctamente');
+          this.router.navigate(['/admin/categories']);
+        },
+        error: (err) => {
+          console.error(err);
+          this.notificationService.showError('Error al actualizar la categoría');
+        },
       });
     } else {
       this.categoryService.createCategory({ name }).subscribe({
-        next: () => this.router.navigate(['/admin/categories']),
-        error: (err) => console.error(err),
+        next: () => {
+          this.notificationService.showSuccess('Categoría creada con éxito');
+          this.router.navigate(['/admin/categories']);
+        },
+        error: (err) => {
+          console.error(err);
+          this.notificationService.showError('No se ha creado la categoría');
+        },
       });
     }
   }

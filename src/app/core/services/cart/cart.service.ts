@@ -3,6 +3,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { map, of, switchMap } from 'rxjs';
 import { CartItem, StoredCartItem } from '../../../models/cart-item.model';
 import { Product } from '../../../models/product.model';
+import { NotificationService } from '../notification/notification.service';
 import { ProductService } from '../products/product.service';
 
 @Injectable({
@@ -10,6 +11,7 @@ import { ProductService } from '../products/product.service';
 })
 export class CartService {
   private productService = inject(ProductService);
+  private notificationService = inject(NotificationService);
   private localStorageItems = signal<StoredCartItem[]>(this.loadFromStorage());
   isOpen = signal<boolean>(false);
 
@@ -51,6 +53,14 @@ export class CartService {
   }
 
   updateQuantity(productId: number, quantity: number) {
+    const item = this.cartItems().find((i) => i.id === productId);
+
+    if (item && quantity > item.stock!) {
+      this.notificationService.showError(
+        `Lo sentimos, solo hay ${item.stock} unidades disponibles`,
+      );
+      return;
+    }
     if (quantity <= 0) return this.removeCartItem(productId);
 
     this.localStorageItems.update((items) =>
@@ -59,7 +69,13 @@ export class CartService {
   }
 
   removeCartItem(productId: number) {
-    this.localStorageItems.update((items) => items.filter((i) => i.id !== productId));
+    this.localStorageItems.update((items) => {
+      const item = this.cartItems().find((i) => i.id === productId);
+      if (item) {
+        this.notificationService.showInfo(`${item.name} eliminado del carrito`);
+      }
+      return items.filter((i) => i.id !== productId);
+    });
   }
   private mapEnrichedItems(products: Product[], storedItems: StoredCartItem[]): CartItem[] {
     // Se crea un map para filtrar de manera eficiente los productos.

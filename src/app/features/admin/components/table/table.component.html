@@ -1,22 +1,36 @@
 <div class="overflow-x-auto shadow-md rounded-lg border border-gray-200">
-  <table class="w-full text-sm text-left text-gray-500 border-collapse" role="table">
+  <table class="min-w-full text-sm text-left text-gray-500 border-collapse">
     <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200">
       <tr>
         @for (col of columns; track col.key) {
           <th
+            scope="col"
             class="px-6 py-3 border-r border-gray-200"
-            [class.cursor-pointer]="col.sortable"
-            [class.select-none]="col.sortable"
-            [class.hover:bg-gray-200]="col.sortable"
-            (click)="sort(col)"
-            [attr.aria-sort]="sortColumn() === col.key ? sortDirection() : 'none'"
+            [attr.aria-sort]="
+              col.sortable
+                ? sortColumn() === col.key
+                  ? sortDirection() === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+                : null
+            "
           >
-            <div class="flex items-center gap-1">
-              {{ col.header }}
-              @if (col.sortable) {
-                <span class="text-gray-400 text-xs">{{ getSortIcon(col.key) }}</span>
-              }
-            </div>
+            @if (col.sortable) {
+              <button
+                type="button"
+                (click)="sort(col)"
+                class="w-full flex items-center gap-1 font-bold tracking-wider text-left uppercase focus:outline-none focus:text-blue-600 hover:text-gray-900"
+                [attr.aria-label]="'Ordenar por ' + col.header"
+              >
+                {{ col.header }}
+                <span class="text-gray-400 text-xs" aria-hidden="true">
+                  {{ getSortIcon(col.key) }}
+                </span>
+              </button>
+            } @else {
+              <span class="font-bold tracking-wider">{{ col.header }}</span>
+            }
           </th>
         }
       </tr>
@@ -27,8 +41,10 @@
           <tr class="bg-white border-b border-gray-200 hover:bg-blue-50 transition-colors">
             <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: row }" />
             @if (actionsTemplate) {
-              <td class="px-6 py-4 flex justify-center gap-4">
-                <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row }" />
+              <td class="px-6 py-4 whitespace-nowrap text-center">
+                <div class="inline-flex items-center justify-center gap-4">
+                  <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: row }" />
+                </div>
               </td>
             }
           </tr>

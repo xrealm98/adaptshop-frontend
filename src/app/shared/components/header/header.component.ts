@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { CategoryService } from '../../../core/services/categories/category.service';
+import { SiteSettingsService } from '../../../core/services/settings/site-settings.service';
 import { Category } from '../../../models/category.model';
 
 @Component({
@@ -14,13 +15,17 @@ import { Category } from '../../../models/category.model';
 export class HeaderComponent {
   public authService = inject(AuthService);
   cartService = inject(CartService);
+  siteConfig = inject(SiteSettingsService);
   public router = inject(Router);
   private categoryService = inject(CategoryService);
   private eRef = inject(ElementRef);
 
   categories = signal<Category[]>([]);
   searchTerm = signal('');
-  isMenuOpen = signal(false);
+  isProfileMenuOpen = signal(false);
+
+  isMobileMenuOpen = signal(false);
+  isSearchOpen = signal(false);
 
   ngOnInit() {
     this.loadCategories();
@@ -43,14 +48,22 @@ export class HeaderComponent {
   }
 
   toggleMenu() {
-    this.isMenuOpen.update((isMenuOpen) => !isMenuOpen);
+    this.isProfileMenuOpen.update((isProfileMenuOpen) => !isProfileMenuOpen);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update((v) => !v);
+  }
+
+  toggleSearch() {
+    this.isSearchOpen.update((v) => !v);
   }
 
   // Cerrar el desplegable del perfil
   @HostListener('document:click', ['$event'])
   clickout(event: any) {
     if (!this.eRef.nativeElement.contains(event.target)) {
-      this.isMenuOpen.set(false);
+      this.isProfileMenuOpen.set(false);
     }
   }
 

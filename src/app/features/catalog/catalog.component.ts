@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 
 @Component({
   selector: 'app-catalog',
-  imports: [ProductCardComponent, BreadcrumbComponent, PaginationComponent],
+  imports: [ProductCardComponent, BreadcrumbComponent, NgTemplateOutlet, PaginationComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss',
 })
@@ -25,6 +26,7 @@ export class CatalogComponent {
 
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
+  isFilterMenuOpen = signal<boolean>(false);
 
   searchTerm = signal<string>('');
 

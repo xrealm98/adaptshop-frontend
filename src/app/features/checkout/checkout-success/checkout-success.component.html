@@ -1,0 +1,120 @@
+<div class="max-w-3xl p-2 text-center md:mx-auto md:py-12" role="status" aria-live="polite">
+  <div class="mb-8">
+    <div
+      class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4"
+      aria-hidden="true"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2.5"
+        stroke="currentColor"
+        class="w-12 h-12"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900">¡Gracias por comprar en nuestra tienda!</h1>
+    <p class="text-gray-600 mt-2">Tu pedido ha sido confirmado con éxito.</p>
+  </div>
+
+  <!-- Caja pedido -->
+  @if (order) {
+    <article
+      aria-labelledby="order-summary-title"
+      class="bg-white border md:border-4 rounded-2xl shadow-sm text-left overflow-hidden"
+    >
+      <section
+        class="p-6 border-gray-100 flex flex-wrap gap-10"
+        aria-label="Información de entrega"
+      >
+        <div>
+          <p class="text-[14px] font-bold text-gray-400 uppercase mb-1">Dirección de entrega</p>
+          <p class="text-sm text-gray-600">
+            {{ order.shipping_street }}, {{ order.shipping_city }}
+          </p>
+        </div>
+      </section>
+
+      <div class="p-6 bg-gray-50">
+        <h2 id="order-summary-title" class="text-sm font-bold uppercase text-gray-500 mb-4">
+          Resumen del pedido
+        </h2>
+        <!-- Lista productos del pedido -->
+        <div role="list" class="space-y-4">
+          @for (item of order.items; track item.id) {
+            <div role="listitem" class="flex items-center gap-4">
+              <div
+                class="w-16 h-16 bg-gray-100 rounded-lg shrink-0 flex items-center justify-center overflow-hidden"
+                aria-hidden="true"
+              >
+                @if (item.product?.image) {
+                  <img [src]="item.product?.image" class="w-full h-full object-cover" />
+                } @else {
+                  <svg
+                    class="w-8 h-8 text-gray-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                }
+              </div>
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-900">{{ item.product?.name }}</h3>
+                <p class="text-sm text-gray-500">Cantidad: {{ item.quantity }}</p>
+              </div>
+              <span class="font-semibold text-gray-900">{{
+                item.unit_price | currency: 'EUR'
+              }}</span>
+            </div>
+          }
+        </div>
+
+        <section
+          class="mt-6 pt-6 border-t border-gray-400 space-y-2"
+          aria-label="Datos de facturación"
+        >
+          <div class="flex justify-between text-sm text-gray-600">
+            <span class="font-bold">Número de pedido:</span>
+            <span class="font-mono" [attr.aria-label]="'Identificador de pedido #' + order.id"
+              >#{{ order.id }}</span
+            >
+          </div>
+          <div class="flex justify-between text-sm text-gray-600">
+            <span class="font-bold">Fecha:</span>
+            <span>{{ order.created_at | date: 'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="flex justify-between text-xl font-bold text-gray-900 pt-2">
+            <span>Total:</span>
+            <span>{{ order.total | currency: 'EUR' }}</span>
+          </div>
+        </section>
+      </div>
+    </article>
+  }
+
+  <nav
+    class="mt-10 flex flex-col md:flex-row gap-4 justify-center"
+    aria-label="Acciones posteriores a la compra"
+  >
+    <button
+      routerLink="/account/orders"
+      type="button"
+      class="px-8 py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 cursor-pointer"
+    >
+      Ver pedidos
+    </button>
+    <button
+      routerLink="/"
+      type="button"
+      class="px-8 py-3 bg-white border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-100 cursor-pointer"
+    >
+      Volver al inicio
+    </button>
+  </nav>
+</div>

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { getOrderStatusInfo } from '../../../core/constants/order-status.config';
 import { OrdersService } from '../../../core/services/order/orders.service';
@@ -35,19 +35,10 @@ export class OrdersComponent {
     this.loadOrders();
   }
 
-  filteredOrders = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) return this.orders();
-    return this.orders().filter(
-      (o) =>
-        o.id.toString().includes(term) ||
-        o.user?.first_name.toLowerCase().includes(term) ||
-        o.shipping_city.toLowerCase().includes(term) ||
-        o.status.toLowerCase().includes(term),
-    );
-  });
   loadOrders() {
-    this.orderService.getOrders({ page: this.currentPage(), per_page: 10 }).subscribe({
+    const params: any = { page: this.currentPage(), per_page: 10 };
+    if (this.searchTerm()) params.search = this.searchTerm();
+    this.orderService.getOrders(params).subscribe({
       next: (orders) => {
         this.orders.set(orders.data);
         this.totalPages.set(orders.last_page);

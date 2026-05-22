@@ -1,7 +1,9 @@
-<section class="info-container animate-fade-in">
+<section class="info-container animate-fade-in" aria-labelledby="profile-main-heading">
   <div class="header-section flex justify-between items-center mb-10">
     <div>
-      <h2 class="text-2xl font-black text-gray-800 tracking-tight">DATOS PERSONALES</h2>
+      <h2 id="profile-main-heading" class="text-2xl font-black text-gray-800 tracking-tight">
+        DATOS PERSONALES
+      </h2>
     </div>
 
     <button
@@ -12,9 +14,17 @@
       [class.text-blue-600]="!isEditing()"
       [class.border-gray-200]="isEditing()"
       [class.text-gray-400]="isEditing()"
+      [attr.aria-expanded]="isEditing()"
+      [attr.aria-label]="isEditing() ? 'Cancelar edición del perfil' : 'Editar datos del perfil'"
     >
       @if (!isEditing()) {
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="size-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -22,15 +32,16 @@
             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
           />
         </svg>
-        Editar Perfil
+        <span>Editar Perfil</span>
       } @else {
-        Cancelar
+        <span>Cancelar</span>
       }
     </button>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <legend class="sr-only">Información del perfil del usuario</legend>
       <app-form-input
         id="first_name"
         label="Nombre"
@@ -61,12 +72,14 @@
           <input
             formControlName="email"
             class="form_input bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed pl-10"
+            aria-label="Correo electrónico (No modificable)"
           />
           <svg
             class="size-5 absolute left-3 top-3 text-gray-300"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -77,11 +90,11 @@
           </svg>
         </div>
       </div>
-    </div>
+    </fieldset>
 
     <hr class="border-gray-100" />
 
-    <div>
+    <section aria-labelledby="address-heading">
       <h3 class="text-lg font-bold text-gray-800 mb-6">Dirección de envío</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="input-group md:col-span-2">
@@ -123,6 +136,13 @@
           placeholder="Código Postal"
         />
       </div>
+    </section>
+    <div class="sr-only" aria-live="polite">
+      {{
+        isEditing()
+          ? 'El formulario está en modo edición.'
+          : 'Modo edición cancelado, los campos vuelven a ser de solo lectura.'
+      }}
     </div>
 
     @if (isEditing()) {

@@ -1,81 +1,109 @@
-<section class="orders-container animate-fade-in">
-  <h2 class="text-2xl font-black text-gray-800 tracking-tight mb-8">MIS PEDIDOS</h2>
+<section class="animate-fade-in min-h-screen" aria-labelledby="orders-heading">
+  <h2 id="orders-heading" class="text-2xl font-black text-gray-800 tracking-tight mb-8">
+    MIS PEDIDOS
+  </h2>
 
   <div class="space-y-4">
     @for (order of orders(); track order.id) {
+      @let isExpanded = orderId() === order.id;
       @let status = getStatusInfo(order.status);
-      <div class="order-card" [class.order-card--active]="orderId() === order.id">
-        <div
+      <div class="order-card" [class.order-card--active]="isExpanded">
+        <button
+          type="button"
           (click)="openOrder(order.id)"
-          class="flex flex-wrap items-center justify-between p-6 cursor-pointer transition-colors hover:bg-gray-50/50"
+          class="w-full text-left flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6 cursor-pointer transition-colors hover:bg-gray-50/50 gap-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-inset"
+          [attr.aria-expanded]="isExpanded"
+          [attr.aria-controls]="'order-panel-' + order.id"
+          [attr.aria-label]="
+            'Pedido número ' +
+            order.id +
+            ', realizado el ' +
+            (order.created_at | date: 'dd/MM/yyyy') +
+            '. Estado: ' +
+            status.label +
+            '. Total: ' +
+            (order.total | currency: 'EUR')
+          "
         >
-          <div class="flex items-center gap-6">
-            <div class="hidden sm:block p-3 bg-blue-50 rounded-xl">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-              >
+          <div class="flex items-center gap-4">
+            <div class="p-3 bg-blue-50 rounded-xl text-blue-600" aria-hidden="true">
+              <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
+                  stroke-width="1.5"
                   d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                 />
               </svg>
             </div>
-            <div>
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+
+            <div aria-hidden="true">
+              <p
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight"
+              >
                 Pedido #{{ order.id }}
               </p>
-              <p class="font-bold text-gray-800">{{ order.created_at | date: 'dd MMM, yyyy' }}</p>
+              <p class="font-bold text-gray-800 text-base md:text-lg">
+                {{ order.created_at | date: 'dd MMM, yyyy' }}
+              </p>
             </div>
           </div>
 
-          <div class="flex items-center gap-8">
-            <div class="text-right">
-              <p class="text-xs font-bold text-gray-400 uppercase">Total</p>
-              <p class="font-black text-blue-600 text-lg">
+          <div
+            class="flex items-center justify-between md:justify-end gap-6 md:gap-12 border-t border-gray-300 md:border-t-0 pt-3 md:pt-0 w-full md:w-auto"
+            aria-hidden="true"
+          >
+            <div class="md:text-right">
+              <p class="text-[10px] font-bold text-gray-400 uppercase">Total</p>
+              <p class="font-black text-blue-600 text-lg md:text-xl">
                 {{ order.total | currency: 'EUR' }}
               </p>
             </div>
 
-            <span [class]="status.css">
-              {{ status.label }}
-            </span>
+            <div class="flex items-center gap-3">
+              <span
+                [class]="status.css"
+                class="whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+              >
+                {{ status.label }}
+              </span>
 
-            <svg
-              class="size-5 text-gray-400 transition-transform duration-300"
-              [class.rotate-180]="orderId() === order.id"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+              <svg
+                class="size-5 text-gray-400 transition-transform duration-300"
+                [class.rotate-180]="isExpanded"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </div>
-        </div>
-
-        @if (orderId() === order.id) {
-          <div class="border-t border-gray-100 p-6 bg-gray-50/30 animate-slide-down">
+        </button>
+        @if (isExpanded) {
+          <div
+            [id]="'order-panel-' + order.id"
+            class="border-t border-gray-100 p-6 bg-gray-50/30 animate-slide-down"
+            role="region"
+            [attr.aria-label]="'Detalle de productos del pedido ' + order.id"
+          >
             <h4 class="text-sm font-bold text-gray-500 uppercase mb-4 tracking-tighter">
               Productos
             </h4>
-            <div class="space-y-4">
+            <div role="list" class="space-y-4">
               @for (item of order.items; track item.id) {
-                <div class="flex items-center justify-between">
+                <div role="listitem" class="flex items-center justify-between">
                   <div class="flex items-center gap-4">
                     <img
                       [src]="item.product?.image || 'images/placeholder.svg'"
                       class="size-12 rounded-lg object-cover border border-gray-200"
                       alt="Producto"
+                      aria-hidden="true"
                     />
                     <div>
                       <p class="font-bold text-gray-800 text-sm">{{ item.product?.name }}</p>
@@ -83,7 +111,8 @@
                     </div>
                   </div>
                   <p class="font-bold text-gray-800">
-                    {{ item.unit_price | currency: 'EUR' }}
+                    <span class="sr-only">Precio unitario:</span
+                    >{{ item.unit_price | currency: 'EUR' }}
                   </p>
                 </div>
               }

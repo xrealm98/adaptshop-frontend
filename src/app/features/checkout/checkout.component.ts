@@ -8,9 +8,11 @@ import { switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { CartService } from '../../core/services/cart/cart.service';
+import { NotificationService } from '../../core/services/notification/notification.service';
 import { OrdersService } from '../../core/services/order/orders.service';
 import { PaymentService } from '../../core/services/payment/payment.service';
 import { UserService } from '../../core/services/users/user.service';
+import { Order } from '../../models/order.model';
 import { User } from '../../models/user.model';
 import { FormInputComponent } from '../../shared/components/form-controls/form-input/form-input.component';
 
@@ -27,6 +29,7 @@ export class CheckoutComponent {
   public cartService = inject(CartService);
   public authService = inject(AuthService);
   public userService = inject(UserService);
+  private notificationService = inject(NotificationService);
   private location = inject(Location);
   private title = inject(Title);
   private router = inject(Router);
@@ -76,7 +79,10 @@ export class CheckoutComponent {
   }
 
   onPay() {
-    if (this.form.invalid || !this.stripe || !this.cardElement) return;
+    if (this.form.invalid || !this.stripe || !this.cardElement) {
+      this.notificationService.showError('Revisa los datos de envío y pago.');
+      return;
+    }
 
     this.paymentService
       .createPaymentIntent(this.cartService.cartItems())
@@ -87,8 +93,11 @@ export class CheckoutComponent {
         switchMap((result) => this.handlePaymentResult(result)),
       )
       .subscribe({
-        next: () => this.onSuccess(),
-        error: (error) => alert(error.message),
+        next: (order) => this.onSuccess(order),
+        error: (error) =>
+          this.notificationService.showError(
+            error.message || 'Hay un problema al procesar el pago',
+          ),
       });
   }
 
@@ -134,10 +143,12 @@ export class CheckoutComponent {
     return this.processOrder(result.paymentIntent!.id);
   }
 
-  private onSuccess() {
-    alert('¡Pedido realizado con éxito!');
+  private onSuccess(createdOrder: Order) {
+    this.notificationService.showSuccess(`¡Pedido realizado con éxito!`);
     this.cartService.clearCart();
-    this.router.navigate(['/']);
+    this.router.navigate(['/checkout-success'], {
+      state: { order: createdOrder },
+    });
   }
 
   goBack() {

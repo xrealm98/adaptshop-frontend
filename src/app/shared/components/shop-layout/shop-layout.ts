@@ -2,11 +2,22 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
+import { SpinnerComponent } from '../spinner/spinner.component';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'app-shop-layout',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, ToastComponent, SpinnerComponent, FooterComponent],
   templateUrl: './shop-layout.html',
   styleUrl: './shop-layout.scss',
 })
-export class ShopLayout {}
+export class ShopLayout {
+  scrollToContent(event: Event, targetId: string): void {
+    event.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.focus();
+    }
+  }
+}

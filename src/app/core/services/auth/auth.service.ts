@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AuthResponse, LoginDto, RegisterDto } from '../../../models/auth.model';
 import { User } from '../../../models/user.model';
@@ -24,12 +24,17 @@ export class AuthService {
 
   login(data: LoginDto): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, data).pipe(
-      tap({
-        next: (response) => {
-          this.storage.setItem('auth', response.token);
-          this.storage.setItem('user', response.user);
-          this.currentUser.set(response.user);
-        },
+      map((response) => {
+        const isBlocked = Boolean(response.user.is_blocked);
+        if (isBlocked) {
+          throw new Error('USER_BLOCKED');
+        }
+
+        this.storage.setItem('auth', response.token);
+        this.storage.setItem('user', response.user);
+        this.currentUser.set(response.user);
+
+        return response;
       }),
     );
   }

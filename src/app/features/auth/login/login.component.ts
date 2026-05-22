@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { FormInputComponent } from '../../../shared/components/form-controls/form-input/form-input.component';
 
 @Component({
@@ -14,6 +15,7 @@ import { FormInputComponent } from '../../../shared/components/form-controls/for
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   private title = inject(Title);
   errorMessage = '';
@@ -38,10 +40,19 @@ export class LoginComponent {
       const credentials = this.loginForm.getRawValue();
       this.authService.login(credentials).subscribe({
         next: () => {
+          this.notificationService.showInfo('Sesión iniciada. Bienvenido.');
           this.router.navigate(['/']);
         },
-        error: () => {
-          this.errorMessage = 'Credenciales incorrectas';
+        error: (err) => {
+          if (err.message === 'USER_BLOCKED') {
+            this.errorMessage = 'La cuenta ha sido bloqueada.';
+            this.notificationService.showError(
+              `Tu cuenta ha sido bloqueada. Contacta con soporte.`,
+            );
+          } else {
+            this.errorMessage = 'Credenciales incorrectas.';
+            this.notificationService.showError(`Credenciales incorrectas. Inténtalo de nuevo.`);
+          }
         },
       });
     }

@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 
@@ -12,6 +12,15 @@ import { CartService } from '../../../core/services/cart/cart.service';
 export class CartSidebar {
   cartService = inject(CartService);
   private router = inject(Router);
+
+  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
+
+  @HostListener('document:keydown.escape')
+  handleEscapeKey() {
+    if (this.cartService.isOpen()) {
+      this.cartService.closeSidebar();
+    }
+  }
 
   goToCart() {
     this.cartService.closeSidebar();

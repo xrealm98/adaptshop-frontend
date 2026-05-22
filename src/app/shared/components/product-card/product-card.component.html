@@ -1,44 +1,39 @@
 <div
-  class="group relative bg-white rounded-2xl border border-black-100 p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+  class="group relative bg-white rounded-2xl border border-black-100 p-2 md:p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full"
 >
-  <!-- Botón favoritos. Se implementará en un futuro.
-  <button
-    class="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 transition-colors shadow-sm"
-  >
-    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-      />
-    </svg>
-  </button>
-  -->
-
-  <div
+  <a
+    [routerLink]="['/product', product.slug]"
     class="relative aspect-square overflow-hidden rounded-xl mb-5 bg-gray-50 flex items-center justify-center"
+    tabindex="-1"
+    aria-hidden="true"
   >
     <img
-      [src]="
-        product.image && product.image.trim() !== '' ? product.image : '/images/placeholder.svg'
-      "
-      [alt]="product.name"
-      class="h-full w-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
+      [src]="getImageSrc(product.image)"
+      [srcset]="getImageSrcset(product.image)"
+      sizes="(max-width: 640px) 65vw, (max-width: 768px) 320px, 325px"
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
+      [alt]="''"
+      class="h-full w-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-200"
     />
-  </div>
-
+    <span
+      class="md:hidden absolute top-2 right-2 text-[10px] bg-white/90 backdrop-blur-sm text-blue-600 font-bold px-2 py-0.5 rounded-md shadow-sm border border-blue-100 uppercase"
+    >
+      {{ product.stock }}U
+    </span>
+  </a>
   <div class="flex flex-col flex-1">
-    <div class="flex justify-between items-start gap-4 mb-2">
+    <div class="flex flex-col md:flex-row md:justify-between items-start gap-4 mb-2">
       <a [routerLink]="['/product', product.slug]">
         <h3
-          class="font-bold text-gray-800 text-sm md:text-base leading-tight uppercase tracking-tighter line-clamp-2"
+          class="font-bold text-gray-800 text-base leading-tight uppercase tracking-tighter line-clamp-2"
         >
           {{ product.name }}
         </h3>
       </a>
       <span
-        class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2 py-1 rounded-lg border border-blue-100 uppercase"
+        class="hidden md:block text-[12px] bg-blue-50 text-blue-600 font-bold px-2 py-1 rounded-lg border border-blue-100 uppercase"
       >
         {{ product.stock }}U
       </span>
@@ -51,34 +46,47 @@
     </div>
 
     <div
-      class="flex items-center justify-between bg-white rounded-xl border-2 border-green-400 overflow-hidden shadow-sm mt-auto"
+      class="flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200 overflow-hidden mt-auto group/btn"
     >
       <button
         (click)="decrease()"
         [disabled]="itemQuantity() === 0"
-        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+        class="w-20 h-10 flex items-center justify-center bg-green-600 text-white hover:bg-green-500 transition-colors cursor-pointer disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+        [attr.aria-label]="'Restar una unidad de ' + product.name"
       >
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 12H4" />
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
         </svg>
       </button>
 
-      <span class="font-black text-gray-800 px-6 text-lg">{{ itemQuantity() }}</span>
+      <span
+        class="font-black text-gray-800 px-4 md:px-10 text-lg"
+        aria-live="polite"
+        [attr.aria-label]="itemQuantity() + ' unidades seleccionadas'"
+      >
+        {{ itemQuantity() }}
+      </span>
 
       <button
         (click)="addItemToCart()"
-        [disabled]="itemQuantity() >= product.stock"
-        class="flex-1 h-11 flex items-center justify-center bg-green-400 text-white hover:bg-green-500 transition-colors cursor-pointer"
+        [disabled]="isMaxStockReached()"
+        [class]="
+          isMaxStockReached()
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            : 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
+        "
+        class="w-20 h-10 flex items-center justify-center transition-colors"
+        [attr.aria-label]="'Añadir una unidad de ' + product.name"
       >
-        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="3"
-            d="M12 4v16m8-8H4"
-          />
+        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
         </svg>
       </button>
     </div>
+    @if (isMaxStockReached()) {
+      <p class="text-[10px] text-orange-600 font-bold text-center animate-pulse">
+        ¡Stock máximo alcanzado!
+      </p>
+    }
   </div>
 </div>

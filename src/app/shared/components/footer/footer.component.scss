@@ -1,0 +1,8 @@
+@use 'tailwindcss';
+.footer__link {
+  @apply hover:text-gray-400 cursor-pointer transition;
+}
+
+.footer__social-icon {
+  @apply w-7 h-7;
+}

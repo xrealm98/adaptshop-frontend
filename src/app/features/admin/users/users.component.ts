@@ -1,5 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { UserService } from '../../../core/services/users/user.service';
 import { User } from '../../../models/user.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -14,6 +15,7 @@ import { TableComponent } from '../components/table/table.component';
 })
 export class UsersComponent {
   private userService = inject(UserService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   currentPage = signal<number>(1);
   totalPages = signal<number>(1);
@@ -28,24 +30,14 @@ export class UsersComponent {
   users = signal<User[]>([]);
   searchTerm = signal('');
 
-  filteredUsers = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) return this.users();
-    return this.users().filter(
-      (u) =>
-        u.first_name.toLowerCase().includes(term) ||
-        u.last_name.toLowerCase().includes(term) ||
-        u.role?.toLowerCase().includes(term) ||
-        u.email.toLowerCase().includes(term),
-    );
-  });
-
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    this.userService.getUsers({ page: this.currentPage(), per_page: 10 }).subscribe({
+    const params: any = { page: this.currentPage(), per_page: 10 };
+    if (this.searchTerm()) params.search = this.searchTerm();
+    this.userService.getUsers(params).subscribe({
       next: (users) => {
         this.users.set(users.data);
         this.totalPages.set(users.last_page);
@@ -57,22 +49,30 @@ export class UsersComponent {
   onSearch(value: string) {
     this.searchTerm.set(value);
     this.currentPage.set(1);
+    this.loadUsers();
   }
 
   deleteUser(id: number) {
     if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
       this.userService.deleteUser(id).subscribe({
         next: () => {
-          this.users.update((prev) => prev.filter((u) => u.id !== id));
+          this.currentPage.set(1);
+          this.loadUsers();
+          this.notificationService.showInfo(`Usuario eliminado correctamente.`);
         },
-        error: (err) => console.error(err),
+        error: (err) => {
+          this.notificationService.showError(`Error al eliminar el usuario.`);
+          console.error(err);
+        },
       });
     }
   }
   toggleBlock(user: User) {
     this.userService.updateUser(user.id!, { is_blocked: !user.is_blocked }).subscribe({
       next: (updated) => {
-        this.users.update((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
+        this.currentPage.set(1);
+        this.loadUsers();
+        this.notificationService.showInfo(`Estado del usuario modificado correctamente.`);
       },
       error: (err) => console.error(err),
     });

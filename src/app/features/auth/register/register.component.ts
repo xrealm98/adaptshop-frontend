@@ -9,6 +9,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { FormInputComponent } from '../../../shared/components/form-controls/form-input/form-input.component';
 @Component({
   selector: 'app-register.component',
@@ -19,6 +20,7 @@ import { FormInputComponent } from '../../../shared/components/form-controls/for
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   private title = inject(Title);
   errorMessage = '';
@@ -57,9 +59,15 @@ export class RegisterComponent {
       const userData = this.registerForm.getRawValue();
       this.authService.register(userData).subscribe({
         next: () => {
+          this.notificationService.showSuccess(
+            `Cuenta creada correctamente.¡Bienvenido ${userData.first_name}!`,
+          );
           this.router.navigate(['/']);
         },
         error: (err) => {
+          this.notificationService.showError(
+            'Se ha encontrado un problema al crear la cuenta. Revisa los datos.',
+          );
           this.errorMessage = 'Error al registrar el usuario';
         },
       });

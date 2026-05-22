@@ -1,11 +1,17 @@
-<app-hero-banner></app-hero-banner>
+<div class="w-full h-100 md:h-125 lg:h-150 bg-gray-50 mt-6">
+  <app-hero-banner [banners]="homeBanners()"></app-hero-banner>
+</div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <app-product-slider title="Novedades" [products]="latestProducts()" />
+  <div class="min-h-[460px]">
+    <app-product-slider title="Novedades" [products]="latestProducts()" />
+  </div>
 
-  @if (featuredCategory()) {
-    <app-product-slider [title]="featuredCategory()!.name" [products]="featuredProducts()" />
+  @if (featuredCategory() && featuredProducts().length > 0) {
+    <div class="min-h-[460px]">
+      <app-product-slider [title]="featuredCategory()!.name" [products]="featuredProducts()" />
+    </div>
   }
 
-  <app-category-buttons [categories]="categories()"></app-category-buttons>
+  <app-category-buttons [items]="categoryButtonItems()"></app-category-buttons>
 </div>

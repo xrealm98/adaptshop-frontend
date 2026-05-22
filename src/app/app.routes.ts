@@ -45,6 +45,14 @@ export const routes: Routes = [
           import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
       },
       {
+        path: 'checkout-success',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/checkout/checkout-success/checkout-success.component').then(
+            (m) => m.CheckoutSuccessComponent,
+          ),
+      },
+      {
         path: 'account',
         loadComponent: () =>
           import('./features/profile/profile-layout.component').then(
@@ -137,6 +145,13 @@ export const routes: Routes = [
         path: 'users/edit/:id',
         loadComponent: () =>
           import('./features/admin/users/user/user-form').then((m) => m.UserForm),
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/admin/settings/site-settings.component').then(
+            (m) => m.SiteSettingsComponent,
+          ),
       },
     ],
   },

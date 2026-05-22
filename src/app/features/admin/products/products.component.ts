@@ -1,5 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification/notification.service';
 import { ProductService } from '../../../core/services/products/product.service';
 import { Product } from '../../../models/product.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -13,6 +14,7 @@ import { TableComponent } from '../components/table/table.component';
 })
 export class ProductsComponent {
   private productService = inject(ProductService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
   products = signal<Product[]>([]);
   searchTerm = signal('');
@@ -29,18 +31,14 @@ export class ProductsComponent {
     { key: 'actions', header: 'Acciones', sortable: false },
   ];
 
-  filteredProducts = computed(() => {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) return this.products();
-    return this.products().filter((p) => p.name.toLowerCase().includes(term));
-  });
-
   ngOnInit() {
     this.loadProducts();
   }
 
   loadProducts() {
-    this.productService.getProducts({ page: this.currentPage(), per_page: 10 }).subscribe({
+    const params: any = { page: this.currentPage(), per_page: 10 };
+    if (this.searchTerm()) params.search = this.searchTerm();
+    this.productService.getProducts(params).subscribe({
       next: (res) => {
         this.products.set(res.data);
         this.totalPages.set(res.last_page);
@@ -55,13 +53,16 @@ export class ProductsComponent {
   onSearch(value: string) {
     this.searchTerm.set(value);
     this.currentPage.set(1);
+    this.loadProducts();
   }
 
   deleteProduct(id: number) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       this.productService.deleteProduct(id).subscribe({
         next: () => {
-          this.products.update((prev) => prev.filter((p) => p.id !== id));
+          this.currentPage.set(1);
+          this.loadProducts();
+          this.notificationService.showInfo(`Producto eliminado correctamente.`);
         },
       });
     }
