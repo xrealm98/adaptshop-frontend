@@ -57,6 +57,20 @@
           [errorMessages]="{ required: 'El nombre es obligatorio' }"
         />
 
+        <app-form-input
+          id="header_color"
+          type="color"
+          label="Color de fondo de la cabecera"
+          [control]="siteForm.get('header_color')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color del texto de la cabecera"
+          [control]="siteForm.get('header_text_color')!"
+        />
+
         <div class="flex justify-end mt-2">
           <button type="submit" [disabled]="siteForm.invalid" class="form_button w-auto">
             Guardar cambios
@@ -215,6 +229,20 @@
           id="privacy_url"
           label="URL Política de privacidad"
           [control]="footerForm.get('privacy_url')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color de fondo"
+          [control]="footerForm.get('footer_color')!"
+        />
+
+        <app-form-input
+          id="footer_color"
+          type="color"
+          label="Color del texto"
+          [control]="footerForm.get('footer_text_color')!"
         />
 
         <div class="flex justify-end mt-2">

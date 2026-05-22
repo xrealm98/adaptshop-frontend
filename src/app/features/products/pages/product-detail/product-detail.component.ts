@@ -5,6 +5,7 @@ import { switchMap } from 'rxjs';
 import { CartService } from '../../../../core/services/cart/cart.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { ProductService } from '../../../../core/services/products/product.service';
+import { getProductImageSrc, getProductImageSrcset } from '../../../../core/utils/image.utils';
 import { Breadcrumb } from '../../../../models/breadcrumb.model';
 import { Product } from '../../../../models/product.model';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
@@ -25,6 +26,9 @@ export class ProductDetailComponent {
 
   product = signal<Product | null>(null);
   relatedProducts = signal<Product[]>([]);
+
+  getImageSrc = getProductImageSrc;
+  getImageSrcset = getProductImageSrcset;
 
   itemQuantity = computed(() => {
     const item = this.cartService.cartItems().find((i) => i.id === this.product()?.id);

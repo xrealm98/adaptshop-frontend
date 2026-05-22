@@ -53,6 +53,8 @@ export class SiteSettingsComponent {
 
   siteForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
+    header_color: ['#797676'],
+    header_text_color: ['#000000'],
   });
 
   homeForm = this.fb.nonNullable.group({
@@ -66,6 +68,8 @@ export class SiteSettingsComponent {
     about_url: [''],
     legal_url: [''],
     privacy_url: [''],
+    footer_color: ['#000000'],
+    footer_text_color: ['#FFFFFF'],
   });
 
   ngOnInit() {
@@ -83,7 +87,7 @@ export class SiteSettingsComponent {
   private loadSiteSettings() {
     this.settingsService.loadSettings().subscribe({
       next: (settings) => {
-        if (settings.site) this.siteForm.patchValue({ name: settings.site.name });
+        if (settings.site) this.siteForm.patchValue(settings.site);
         if (settings.home) this.setupHomeSection(settings.home);
         if (settings.footer) this.footerForm.patchValue(settings.footer);
       },
@@ -104,22 +108,13 @@ export class SiteSettingsComponent {
   }
 
   private normalizeCategoryButtons(savedButtons: HomeCategoryButton[] = []): HomeCategoryButton[] {
-    const defaultColors = ['emerald', 'sky', 'orange', 'slate'];
-
     return Array.from({ length: 4 }, (_, i) => {
-      return savedButtons[i] || { category_id: 0, color: defaultColors[i] };
+      return savedButtons[i] || { category_id: 0, color: '' };
     });
   }
   private normalizeBanners(savedBanners: HomeBanner[] = []): HomeBanner[] {
-    const defaultImages = [
-      'https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=2000',
-      'https://images.unsplash.com/photo-1547082299-de196ea013d6?q=80&w=2000',
-      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=2000',
-    ];
     return Array.from({ length: 3 }, (_, i) => {
-      return (
-        savedBanners[i] || { title: '', subtitle: '', image: defaultImages[i], buttonText: '' }
-      );
+      return savedBanners[i] || { title: '', subtitle: '', image: '', buttonText: '' };
     });
   }
 

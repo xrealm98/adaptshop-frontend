@@ -3,6 +3,7 @@ import { Component, computed, inject, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { NotificationService } from '../../../core/services/notification/notification.service';
+import { getProductImageSrc, getProductImageSrcset } from '../../../core/utils/image.utils';
 import { Product } from '../../../models/product.model';
 
 @Component({
@@ -15,6 +16,8 @@ export class ProductCardComponent {
   cartService = inject(CartService);
   private notificationService = inject(NotificationService);
   @Input({ required: true }) product!: Product;
+  getImageSrc = getProductImageSrc;
+  getImageSrcset = getProductImageSrcset;
 
   isMaxStockReached = computed(() => {
     return this.itemQuantity() >= this.product.stock;

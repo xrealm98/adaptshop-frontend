@@ -12,6 +12,8 @@ export interface FooterSettings {
   about_url: string;
   legal_url: string;
   privacy_url: string;
+  footer_color: string;
+  footer_text_color: string;
 }
 
 // Home
@@ -36,4 +38,6 @@ export interface HomeCategoryButton {
 // Site
 export interface SiteSettings {
   name: string;
+  header_color: string;
+  header_text_color: string;
 }

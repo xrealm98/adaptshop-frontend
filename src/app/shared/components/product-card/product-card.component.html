@@ -8,11 +8,14 @@
     aria-hidden="true"
   >
     <img
-      [src]="
-        product.image && product.image.trim() !== '' ? product.image : '/images/placeholder.svg'
-      "
+      [src]="getImageSrc(product.image)"
+      [srcset]="getImageSrcset(product.image)"
+      sizes="(max-width: 640px) 65vw, (max-width: 768px) 320px, 325px"
+      fetchpriority="high"
+      loading="eager"
+      decoding="async"
       [alt]="''"
-      class="h-full w-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-500"
+      class="h-full w-full object-cover mix-blend-multiply group-hover:scale-110 transition-transform duration-200"
     />
     <span
       class="md:hidden absolute top-2 right-2 text-[10px] bg-white/90 backdrop-blur-sm text-blue-600 font-bold px-2 py-0.5 rounded-md shadow-sm border border-blue-100 uppercase"

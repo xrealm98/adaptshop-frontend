@@ -1,14 +1,18 @@
 @if (banners().length > 0) {
-  <section class="relative w-full overflow-hidden mt-6" aria-label="Banner promocional">
+  <section class="relative w-full h-full overflow-hidden" aria-label="Banner promocional">
     <swiper-container #swiperRef init="false" class="h-100 md:h-125 lg:h-150 w-full">
-      @for (banner of banners(); track banner.title) {
+      @for (banner of banners(); track banner.title; let i = $index) {
         <swiper-slide>
           <div class="relative w-full h-full flex items-center">
             <div class="absolute inset-0">
               <img
-                [src]="banner.image"
+                [src]="getOptimizedSrc(banner.image)"
+                [srcset]="getOptimizedSrcset(banner.image)"
+                sizes="100vw"
                 class="w-full h-full object-cover"
-                [alt]="banner.title"
+                [alt]=""
+                [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+                [attr.fetchpriority]="i === 0 ? 'high' : 'auto'"
                 aria-hidden="true"
               />
               <div
