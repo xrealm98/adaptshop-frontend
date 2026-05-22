@@ -30,7 +30,11 @@ export class HomeComponent {
   featuredProducts = signal<Product[]>([]);
   categoryButtonItems = signal<CategoryButtonItem[]>([]);
   categories = signal<Category[]>([]);
-  homeBanners = computed(() => this.settingsService.settings()?.home?.banners || []);
+  homeBanners = computed(() => {
+    const settings = this.settingsService.settings();
+    if (!settings) return null;
+    return settings.home?.banners;
+  });
 
   ngOnInit() {
     this.title.setTitle(`Inicio`);
@@ -47,7 +51,7 @@ export class HomeComponent {
   loadCategoriesAndFeatured() {
     this.categoryService.getAllCategories().subscribe({
       next: (allCategories) => {
-        const homeSettings = this.settingsService.settings().home;
+        const homeSettings = this.settingsService.settings()?.home;
 
         this.startFeaturedSlider(allCategories, homeSettings?.featured_category_id);
         this.startCategoryButtons(allCategories, homeSettings?.category_buttons);
