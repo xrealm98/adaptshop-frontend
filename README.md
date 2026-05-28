@@ -7,6 +7,21 @@ Frontend de AdaptShop, una plataforma de comercio electrónico genérica y confi
 - Angular 21
 - TypeScript
 - SCSS
+- Tailwind CSS v4
+- Swiper v12
+
+## INSTALACIÓN LOCAL - FRONTEND
+
+1. Acceder a la carpeta:
+   cd adaptshop-frontend
+
+2. Instalar dependencias:
+   npm install
+
+3. Para apuntar al backend local se aplica en la variable apiUrl de los archivos src/environments/environment.ts
+
+4. Iniciar la aplicación:
+   ng serve
 
 ## Repositorio backend
 
